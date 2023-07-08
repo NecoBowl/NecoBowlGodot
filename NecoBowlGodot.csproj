@@ -1,0 +1,19 @@
+<Project Sdk="Godot.NET.Sdk/4.0.2">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <Nullable>enable</Nullable>
+    <RootNamespace>neco_soft.NecoBowlGodot</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Reference Include="neco_soft.NecoBowlCore">
+      <HintPath>..\NecoBowl\NecoBowlCore</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\NecoBowl\NecoBowlCore\NecoBowlCore.csproj" />
+    <ProjectReference Include="..\NecoBowl\NecoBowlDefinitions\NecoBowlDefinitions.csproj" />
+  </ItemGroup>
+</Project>

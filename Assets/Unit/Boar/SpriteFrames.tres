@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://ca178t2qf6na"]
+
+[ext_resource type="Texture2D" uid="uid://b7nkx657xjs0j" path="res://Assets/Unit/Boar/MadBoarIdleSide.png" id="1_ftu3i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_in7xu"]
+atlas = ExtResource("1_ftu3i")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8hpu"]
+atlas = ExtResource("1_ftu3i")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2bkv"]
+atlas = ExtResource("1_ftu3i")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xkbgp"]
+atlas = ExtResource("1_ftu3i")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_in7xu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8hpu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2bkv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xkbgp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

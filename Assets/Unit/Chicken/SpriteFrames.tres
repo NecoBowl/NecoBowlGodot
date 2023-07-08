@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dcskeppdkaubl"]
+
+[ext_resource type="Texture2D" uid="uid://ds10h44gj1cmn" path="res://Assets/Unit/Chicken/CluckingChickenIdleSide.png" id="1_8rvtu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4x0y8"]
+atlas = ExtResource("1_8rvtu")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krru5"]
+atlas = ExtResource("1_8rvtu")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fv7ad"]
+atlas = ExtResource("1_8rvtu")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_clo2f"]
+atlas = ExtResource("1_8rvtu")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4x0y8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krru5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fv7ad")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_clo2f")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

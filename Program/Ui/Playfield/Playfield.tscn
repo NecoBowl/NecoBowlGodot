@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://2j82jn2vajms"]
+
+[ext_resource type="Script" path="res://Program/Ui/Playfield/Playfield.cs" id="1_ytb7b"]
+
+[node name="Playfield" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ytb7b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="GridHolder" type="Control" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StepButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Step"
+
+[node name="ScenariosList" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2

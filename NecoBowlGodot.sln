@@ -1,0 +1,35 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NecoBowlGodot", "NecoBowlGodot.csproj", "{F5859830-1C76-41E3-B5A6-8235D3B0A5E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NecoBowlCore", "..\NecoBowl\NecoBowlCore\NecoBowlCore.csproj", "{FF6AE41E-13FD-4A4D-B93E-3F8609C401E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NecoBowlDefinitions", "..\NecoBowl\NecoBowlDefinitions\NecoBowlDefinitions.csproj", "{99D946C3-D0E5-4681-9776-904780BD62D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5859830-1C76-41E3-B5A6-8235D3B0A5E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5859830-1C76-41E3-B5A6-8235D3B0A5E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5859830-1C76-41E3-B5A6-8235D3B0A5E4}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{F5859830-1C76-41E3-B5A6-8235D3B0A5E4}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{F5859830-1C76-41E3-B5A6-8235D3B0A5E4}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{F5859830-1C76-41E3-B5A6-8235D3B0A5E4}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{FF6AE41E-13FD-4A4D-B93E-3F8609C401E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF6AE41E-13FD-4A4D-B93E-3F8609C401E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF6AE41E-13FD-4A4D-B93E-3F8609C401E9}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF6AE41E-13FD-4A4D-B93E-3F8609C401E9}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{FF6AE41E-13FD-4A4D-B93E-3F8609C401E9}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF6AE41E-13FD-4A4D-B93E-3F8609C401E9}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+		{99D946C3-D0E5-4681-9776-904780BD62D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D946C3-D0E5-4681-9776-904780BD62D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99D946C3-D0E5-4681-9776-904780BD62D0}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D946C3-D0E5-4681-9776-904780BD62D0}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{99D946C3-D0E5-4681-9776-904780BD62D0}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D946C3-D0E5-4681-9776-904780BD62D0}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+EndGlobal

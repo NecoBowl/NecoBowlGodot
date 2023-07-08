@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://csxyukbtdaacm"]
+
+[ext_resource type="Script" path="res://Program/Ui/Playfield/PlayfieldSpace.cs" id="1_dhssi"]
+
+[node name="PlayfieldSpace" type="Control"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_dhssi")
+metadata/_edit_use_anchors_ = true
