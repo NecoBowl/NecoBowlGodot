@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://2j82jn2vajms"]
+[gd_scene load_steps=4 format=3 uid="uid://d4cyemjtawvte"]
 
 [ext_resource type="Script" path="res://Program/Ui/Playfield/Playfield.cs" id="1_ytb7b"]
+[ext_resource type="PackedScene" uid="uid://cn5mvcst8kft4" path="res://Program/Ui/HandWidget/HandWidget.tscn" id="2_fy6xd"]
+[ext_resource type="PackedScene" uid="uid://cfa53e5s6hc2b" path="res://Program/Ui/CardPlayOptionMenu/CardPlayOptionMenu.tscn" id="3_qndh3"]
 
 [node name="Playfield" type="HBoxContainer"]
 anchors_preset = 15
@@ -10,18 +12,85 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ytb7b")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="PanelLeft" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Spacer" type="Control" parent="PanelLeft"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="GridHolder" type="Control" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelLeft"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelLeft/MarginContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelLeft/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "Munty"
+fit_content = true
+scroll_active = false
+
+[node name="MoneyDisplay" type="RichTextLabel" parent="PanelLeft/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 6
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "3"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 
-[node name="StepButton" type="Button" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="PanelLeft"]
+layout_mode = 2
+
+[node name="PanelCenter" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="SpaceLines" type="VBoxContainer" parent="PanelCenter"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="PanelCenter"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start"
+
+[node name="StepButton" type="Button" parent="PanelCenter"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Step"
 
-[node name="ScenariosList" type="VBoxContainer" parent="."]
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AllUnits" parent="VBoxContainer2" instance=ExtResource("2_fy6xd")]
 unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InfoPanel" type="PanelContainer" parent="VBoxContainer2"]
+layout_mode = 2
+
+[node name="UnitPlacementInfoTabs" type="TabContainer" parent="VBoxContainer2/InfoPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+clip_tabs = false
+tabs_visible = false
+use_hidden_tabs_for_min_size = true
+
+[node name="CardPlayOptionMenu" parent="VBoxContainer2/InfoPanel/UnitPlacementInfoTabs" instance=ExtResource("3_qndh3")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="CenterContainer" parent="VBoxContainer2/InfoPanel/UnitPlacementInfoTabs"]
+visible = false
 layout_mode = 2

@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://chtfonpqq8rhj"]
+
+[ext_resource type="Texture2D" uid="uid://druhpsjlqc3oj" path="res://Assets/Unit/Cat/MeowingCatIdleSide.png" id="1_6uosm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qns8p"]
+atlas = ExtResource("1_6uosm")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r0ha4"]
+atlas = ExtResource("1_6uosm")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fqhaj"]
+atlas = ExtResource("1_6uosm")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5hd4t"]
+atlas = ExtResource("1_6uosm")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qns8p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r0ha4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fqhaj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5hd4t")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

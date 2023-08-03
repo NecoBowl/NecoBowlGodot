@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://bqoftu7jaelfm"]
+
+[ext_resource type="Texture2D" uid="uid://dgci6qeylr2wq" path="res://Assets/Unit/Goose/HonkingGooseIdleSide.png" id="1_qg77r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nns7d"]
+atlas = ExtResource("1_qg77r")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_au4c0"]
+atlas = ExtResource("1_qg77r")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3lewp"]
+atlas = ExtResource("1_qg77r")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0f2jp"]
+atlas = ExtResource("1_qg77r")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nns7d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_au4c0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3lewp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0f2jp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

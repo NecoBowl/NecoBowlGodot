@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmuumh815hs6h"]
+
+[ext_resource type="Texture2D" uid="uid://cpro4w0oj1rhn" path="res://Assets/Unit/Crab/Static.tres" id="1_f58qs"]
+[ext_resource type="Script" path="res://Program/Ui/HandWidget/UnitButton.cs" id="1_kgb8j"]
+
+[node name="Control" type="Button"]
+texture_filter = 1
+custom_minimum_size = Vector2(150, 180)
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("1_kgb8j")
+
+[node name="Contents" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CardIcon" type="TextureRect" parent="Contents"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("1_f58qs")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="CardName" type="RichTextLabel" parent="Contents"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "Distinguished Crab with a Long Name"
+fit_content = true
+scroll_active = false
+autowrap_mode = 2
+
+[node name="CardCost" type="RichTextLabel" parent="Contents"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 30
+text = "3"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

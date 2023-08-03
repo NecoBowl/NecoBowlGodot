@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dhvfc5q0eexex"]
+
+[ext_resource type="Texture2D" uid="uid://cl5l8v8l06r5o" path="res://Assets/Unit/Skunk/StinkySkunkIdleSide.png" id="1_bliqc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fwta0"]
+atlas = ExtResource("1_bliqc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_804cc"]
+atlas = ExtResource("1_bliqc")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0yvu"]
+atlas = ExtResource("1_bliqc")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0f830"]
+atlas = ExtResource("1_bliqc")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fwta0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_804cc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m0yvu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0f830")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

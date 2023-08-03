@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://cpro4w0oj1rhn"]
+
+[ext_resource type="Texture2D" uid="uid://1ygqq8t1mupm" path="res://Assets/Unit/Crab/CoralCrabIdleSide.png" id="1_fs62o"]
+
+[resource]
+atlas = ExtResource("1_fs62o")
+region = Rect2(0, 0, 16, 16)

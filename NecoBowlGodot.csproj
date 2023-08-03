@@ -16,4 +16,8 @@
     <ProjectReference Include="..\NecoBowl\NecoBowlCore\NecoBowlCore.csproj" />
     <ProjectReference Include="..\NecoBowl\NecoBowlDefinitions\NecoBowlDefinitions.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Program\Networking" />
+  </ItemGroup>
 </Project>

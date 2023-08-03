@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://ckrvqeqjqx5gs"]
+
+[ext_resource type="Texture2D" uid="uid://b5l8urhc7kkpp" path="res://Assets/Unit/Ball/Football.png" id="1_y3eif"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_y3eif")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

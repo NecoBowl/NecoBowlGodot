@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://w4lbvs68h65b"]
+
+[ext_resource type="Texture2D" uid="uid://lh3d3b3ba7st" path="res://Assets/Unit/Dog/FaithfulDogIdleSide.png" id="1_7ussy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_px4up"]
+atlas = ExtResource("1_7ussy")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_temvi"]
+atlas = ExtResource("1_7ussy")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3l6d"]
+atlas = ExtResource("1_7ussy")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3cmde"]
+atlas = ExtResource("1_7ussy")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_px4up")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_temvi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d3l6d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3cmde")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

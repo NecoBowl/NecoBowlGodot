@@ -1,0 +1,92 @@
+[gd_scene load_steps=3 format=3 uid="uid://cn5mvcst8kft4"]
+
+[ext_resource type="Script" path="res://Program/Ui/HandWidget/HandWidget.cs" id="1_bb18t"]
+[ext_resource type="Texture2D" uid="uid://cpro4w0oj1rhn" path="res://Assets/Unit/Crab/Static.tres" id="2_yjywp"]
+
+[node name="HandWidget" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bb18t")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Control" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer/Control"]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/Control"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[center]Hand[/center]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="Grid" type="HFlowContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 5
+
+[node name="Button6" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+icon = ExtResource("2_yjywp")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Button5" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+icon = ExtResource("2_yjywp")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Button4" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+icon = ExtResource("2_yjywp")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Button3" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+icon = ExtResource("2_yjywp")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+icon = ExtResource("2_yjywp")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+icon = ExtResource("2_yjywp")
+icon_alignment = 1
+expand_icon = true

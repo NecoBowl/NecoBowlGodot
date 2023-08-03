@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=3 uid="uid://hxgdjh2lbwfo"]
+
+[ext_resource type="Script" path="res://Program/Ui/PlayfieldUnit/UnitOnPlayfield.cs" id="1_gqhw7"]
+[ext_resource type="Script" path="res://Program/Ui/PlayfieldUnit/UnitOnPlayfield_SpriteRoot.cs" id="2_tddry"]
+[ext_resource type="SpriteFrames" uid="uid://dgblyq764lk2x" path="res://Assets/Unit/Crab/SpriteFrames.tres" id="3_8aagg"]
+[ext_resource type="Theme" uid="uid://b2qus6k0pbi63" path="res://Program/Resource/PlayfieldFloatingText.tres" id="3_veth6"]
+
+[node name="UnitOnPlayfield" type="Control"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_gqhw7")
+
+[node name="SpriteRoot" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_tddry")
+
+[node name="UnitSpriteContainer" type="Node2D" parent="SpriteRoot"]
+
+[node name="UnitSprite" type="AnimatedSprite2D" parent="SpriteRoot/UnitSpriteContainer"]
+unique_name_in_owner = true
+scale = Vector2(2.5, 2.5)
+sprite_frames = ExtResource("3_8aagg")
+
+[node name="UnitHealth" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("3_veth6")
+text = "5/10"
+fit_content = true
+autowrap_mode = 0
+
+[node name="UnitPower" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 10.0
+grow_vertical = 0
+theme = ExtResource("3_veth6")
+text = "3"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

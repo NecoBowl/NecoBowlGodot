@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dgblyq764lk2x"]
+
+[ext_resource type="Texture2D" uid="uid://1ygqq8t1mupm" path="res://Assets/Unit/Crab/CoralCrabIdleSide.png" id="1_28jcq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0o3p"]
+atlas = ExtResource("1_28jcq")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_362ct"]
+atlas = ExtResource("1_28jcq")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrkbm"]
+atlas = ExtResource("1_28jcq")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ty4y"]
+atlas = ExtResource("1_28jcq")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k0o3p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_362ct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrkbm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ty4y")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
