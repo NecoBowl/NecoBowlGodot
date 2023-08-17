@@ -19,5 +19,6 @@
   
   <ItemGroup>
     <Folder Include="Program\Networking" />
+    <Folder Include="Program\ResourceTypes" />
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@ public partial class UnitOnPlayfield : Control
     {
         var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<UnitOnPlayfield>();
         node.UnitInformation = unit;
+        node.SetAnchorsPreset(LayoutPreset.FullRect);
         return node;
     }
 
@@ -26,10 +27,14 @@ public partial class UnitOnPlayfield : Control
     private AnimatedSprite2D UnitSprite => GetNode<AnimatedSprite2D>("%UnitSprite");
     private RichTextLabel UnitPower => GetNode<RichTextLabel>("%UnitPower");
     private RichTextLabel UnitHealth => GetNode<RichTextLabel>("%UnitHealth");
+    public CpuParticles2D ParticlesPickup => GetNode<CpuParticles2D>($"%{nameof(ParticlesPickup)}");
 
     public void Populate(NecoUnitInformation unit)
     {
         UnitSprite.SpriteFrames = Asset.Unit.FromModel(unit.UnitModel).GetSpriteFrames();
+        var (scaleX, scaleY) = Size / UnitSprite.SpriteFrames.GetFrameTexture("default", 0).GetSize();
+        var scale = Math.Min(scaleX, scaleY);
+        UnitSprite.Scale = new(scale, scale);
         UnitPower.Text = unit.Power.ToString();
         UnitHealth.Text = unit.CurrentHealth != unit.MaxHealth
             ? $"{unit.CurrentHealth} / {unit.MaxHealth}"

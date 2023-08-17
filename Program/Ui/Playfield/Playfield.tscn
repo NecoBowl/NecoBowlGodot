@@ -2,44 +2,57 @@
 
 [ext_resource type="Script" path="res://Program/Ui/Playfield/Playfield.cs" id="1_ytb7b"]
 [ext_resource type="PackedScene" uid="uid://cn5mvcst8kft4" path="res://Program/Ui/HandWidget/HandWidget.tscn" id="2_fy6xd"]
-[ext_resource type="PackedScene" uid="uid://cfa53e5s6hc2b" path="res://Program/Ui/CardPlayOptionMenu/CardPlayOptionMenu.tscn" id="3_qndh3"]
+[ext_resource type="PackedScene" uid="uid://bxdm5t1so4560" path="res://Program/Ui/CardInformationPanel/CardInformationPanel.tscn" id="3_ud7v1"]
 
-[node name="Playfield" type="HBoxContainer"]
+[node name="Playfield" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_ytb7b")
 
-[node name="PanelLeft" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 4
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Spacer" type="Control" parent="PanelLeft"]
+[node name="PanelLeft" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Spacer" type="Control" parent="HBoxContainer/PanelLeft"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelLeft"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelLeft"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelLeft/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelLeft/MarginContainer"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PanelLeft/MarginContainer/HBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+mouse_filter = 1
 text = "Munty"
 fit_content = true
 scroll_active = false
 
-[node name="MoneyDisplay" type="RichTextLabel" parent="PanelLeft/MarginContainer/HBoxContainer"]
+[node name="MoneyDisplay" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
+mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 30
 bbcode_enabled = true
 text = "3"
@@ -47,50 +60,56 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="HSeparator" type="HSeparator" parent="PanelLeft"]
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/PanelLeft"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="PanelCenter" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="PanelCenter" type="VBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="SpaceLines" type="VBoxContainer" parent="PanelCenter"]
+[node name="SpaceLines" type="VBoxContainer" parent="HBoxContainer/PanelCenter"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="PanelCenter"]
+[node name="StartButton" type="Button" parent="HBoxContainer/PanelCenter"]
 unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 1
 text = "Start"
 
-[node name="StepButton" type="Button" parent="PanelCenter"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelCenter"]
+layout_mode = 2
+
+[node name="StepButton" type="Button" parent="HBoxContainer/PanelCenter/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
 text = "Step"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+[node name="AutoplayToggle" type="CheckBox" parent="HBoxContainer/PanelCenter/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+button_pressed = true
+text = "Autoplay"
 
-[node name="AllUnits" parent="VBoxContainer2" instance=ExtResource("2_fy6xd")]
+[node name="EndPlayButton" type="Button" parent="HBoxContainer/PanelCenter"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+text = "End Play"
 
-[node name="InfoPanel" type="PanelContainer" parent="VBoxContainer2"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="UnitPlacementInfoTabs" type="TabContainer" parent="VBoxContainer2/InfoPanel"]
+[node name="AllUnits" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("2_fy6xd")]
 unique_name_in_owner = true
 layout_mode = 2
-clip_tabs = false
-tabs_visible = false
-use_hidden_tabs_for_min_size = true
+size_flags_vertical = 3
+mouse_filter = 1
 
-[node name="CardPlayOptionMenu" parent="VBoxContainer2/InfoPanel/UnitPlacementInfoTabs" instance=ExtResource("3_qndh3")]
+[node name="CardInfo" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_ud7v1")]
 unique_name_in_owner = true
-layout_mode = 2
-
-[node name="MarginContainer" type="CenterContainer" parent="VBoxContainer2/InfoPanel/UnitPlacementInfoTabs"]
-visible = false
 layout_mode = 2

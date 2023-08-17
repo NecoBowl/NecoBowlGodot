@@ -42,49 +42,57 @@ size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="Grid" type="HFlowContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Grid" type="HFlowContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/h_separation = 5
 
-[node name="Button6" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+[node name="Button6" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Grid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_yjywp")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Button5" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+[node name="Button5" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Grid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_yjywp")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Button4" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+[node name="Button4" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Grid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_yjywp")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Button3" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+[node name="Button3" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Grid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_yjywp")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Grid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_yjywp")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Grid"]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Grid"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_yjywp")

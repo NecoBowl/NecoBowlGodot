@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Program/Ui/Playfield/PlayfieldSpace.cs" id="1_dhssi"]
 
 [node name="PlayfieldSpace" type="TextureButton"]
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(56, 56)
+mouse_filter = 1
 script = ExtResource("1_dhssi")
 metadata/_edit_use_anchors_ = true

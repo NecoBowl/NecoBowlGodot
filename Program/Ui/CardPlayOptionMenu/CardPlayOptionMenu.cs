@@ -11,11 +11,14 @@ using neco_soft.NecoBowlDefinitions.Unit;
 using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program.Ui;
 
-using Boar = neco_soft.NecoBowlDefinitions.Card.Boar;
-using Chicken = neco_soft.NecoBowlDefinitions.Card.Chicken;
-
-public partial class CardPlayOptionMenu : Panel
+public partial class CardPlayOptionMenu : PanelContainer
 {
+	public static CardPlayOptionMenu Instantiate()
+	{
+		var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<CardPlayOptionMenu>();
+		return node;
+	}
+	
 	private RichTextLabel CardNameDisplay => GetNode<RichTextLabel>("%CardName");
 	private TextureRect CardIcon => GetNode<TextureRect>("%CardIcon");
 	private Control OptionsList => GetNode<Control>("%OptionList");

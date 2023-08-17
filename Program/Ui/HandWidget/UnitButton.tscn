@@ -5,7 +5,7 @@
 
 [node name="Control" type="Button"]
 texture_filter = 1
-custom_minimum_size = Vector2(150, 180)
+custom_minimum_size = Vector2(100, 180)
 offset_right = 8.0
 offset_bottom = 8.0
 script = ExtResource("1_kgb8j")

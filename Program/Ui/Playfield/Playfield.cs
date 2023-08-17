@@ -1,20 +1,15 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
-using Microsoft.VisualBasic;
-
-using neco_soft.NecoBowlCore.Action;
 using neco_soft.NecoBowlCore.Input;
 using neco_soft.NecoBowlCore.Model;
 using neco_soft.NecoBowlCore.Tactics;
-using neco_soft.NecoBowlDefinitions;
-using neco_soft.NecoBowlDefinitions.Unit;
 using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program;
 using neco_soft.NecoBowlGodot.Program.Ui;
+using neco_soft.NecoBowlGodot.Program.Ui.CardInformationPanel;
 
 using NLog;
 
@@ -25,15 +20,20 @@ public partial class Playfield : Control
     private NecoPlayInformation? Play = null!;
 	
     private Control SpaceLines => GetNode<Control>("%SpaceLines");
-    private CardPlayOptionMenu CardPlayOptionMenu => GetNode<CardPlayOptionMenu>("%CardPlayOptionMenu");
 
     private Button StepButton => GetNode<Button>("%StepButton");
     private Button StartButton => GetNode<Button>("%StartButton");
 
     private RichTextLabel MoneyDisplay => GetNode<RichTextLabel>("%MoneyDisplay");
+    private CardInformationPanel CardInfo => GetNode<CardInformationPanel>($"%{nameof(CardInfo)}");
+    private CheckBox AutoplayToggle => GetNode<CheckBox>($"%{nameof(AutoplayToggle)}");
+    private Button EndPlayButton => GetNode<Button>($"%{nameof(EndPlayButton)}");
+
+    private CardPlayOptionMenu? CardPlayOptionMenu;
 
     private PlayfieldState CurrentState => Play is null ? PlayfieldState.Plan : PlayfieldState.Play;
     private NecoUnitCardModel? SelectedCardModel = null;
+    private bool Autoplay = false;
 	
     public override void _Ready()
     {
@@ -44,20 +44,34 @@ public partial class Playfield : Control
         StartButton.Pressed += StartPlay;
 		
         // Step
-        StepButton.Pressed += () => {
-            if (CurrentState != PlayfieldState.Play) {
-                throw new InvalidOperationException($"invalid state {CurrentState}");
-            }
-            
-            var mutations = Play!.Step();
-            StepDirector director = new StepDirector(this);
-            AddChild(director);
-            director.ApplyStep(mutations);
-            director.DirectorFinished += () => OnStepDirectorFinished(director);
+        StepButton.Pressed += StartStep;
+
+        AutoplayToggle.Toggled += (state) => {
+            Autoplay = state;
+        };
+        AutoplayToggle.ButtonPressed = Autoplay;
+
+        EndPlayButton.Pressed += () => {
+            ContextSingleton.Context.SendInput(new NecoInput.RequestEndPlay(ContextSingleton.Context.Players.Offense));
+            ContextSingleton.Context.SendInput(new NecoInput.RequestEndPlay(ContextSingleton.Context.Players.Defense));
+            Populate();
         };
 
         UpdateControls();
         Populate();
+    }
+
+    private void StartStep()
+    {
+        if (CurrentState != PlayfieldState.Play) {
+            throw new InvalidOperationException($"invalid state {CurrentState}");
+        }
+
+        var mutations = Play!.Step();
+        StepDirector director = new StepDirector(this);
+        AddChild(director);
+        director.ApplyStep(mutations);
+        director.DirectorFinished += () => OnStepDirectorFinished(director);
     }
 
     public Control GetGridSpace((int x, int y) coords)
@@ -66,11 +80,25 @@ public partial class Playfield : Control
     public List<PlayfieldSpace> GetGridSpaces()
         => SpaceLines.GetChildren().SelectMany(line => line.GetChildren()).Cast<PlayfieldSpace>().ToList();
 
+    public override void _GuiInput(InputEvent @event)
+    {
+        if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Left } mouseInput) {
+            if (CardPlayOptionMenu is not null) {
+                RemoveChild(CardPlayOptionMenu);
+                CardPlayOptionMenu!.QueueFree();
+                CardPlayOptionMenu = null;
+            }
+        }
+    }
+
     private void StartPlay()
     {
         ContextSingleton.Context.FinishTurn();
         Play = ContextSingleton.Context.BeginPlay();
         Populate();
+        
+        if (Autoplay)
+            StartStep();
     }
 
     private void UpdateControls()
@@ -94,7 +122,9 @@ public partial class Playfield : Control
 
     private void Populate()
     {
-        Logger.Debug("Redrawing field");
+        if (Play?.IsFinished ?? false) {
+            Play = null;
+        }
         
         UpdateControls();
         UpdateInfoDisplay();
@@ -133,6 +163,10 @@ public partial class Playfield : Control
     {
         RemoveChild(director);
         Populate();
+
+        if (Autoplay) {
+            SetStepTimer();
+        }
     }
 
     private void OnSpacePressed(PlayfieldSpace space)
@@ -150,10 +184,19 @@ public partial class Playfield : Control
         } else {
             var cardPlay = ContextSingleton.Context.GetTurn().CardPlayAt(space.Coords);
             if (cardPlay is not null) {
-                CardPlayOptionMenu.PopulateWithCard(cardPlay.Card);            
+                CardPlayOptionMenu = CardPlayOptionMenu.Instantiate();
+                AddChild(CardPlayOptionMenu);
+                CardPlayOptionMenu.PopulateWithCard(cardPlay.Card);
+                CardPlayOptionMenu.GlobalPosition = space.GlobalPosition;
             } 
         }
         Populate();
+    }
+
+    private void SetStepTimer()
+    {
+        var timer = GetTree().CreateTimer(0.5f);
+        timer.Timeout += StartStep;
     }
 
     private void OnCardSelected(Asset.Card card)
@@ -163,6 +206,8 @@ public partial class Playfield : Control
         
         SelectedCardModel = (NecoUnitCardModel)card.CardModel;
         UpdateSpaceHoverTexture();
+        CardInfo.UpdateFromCard(new NecoUnitCard((NecoUnitCardModel)card.CardModel), CardInformationPanel_NodeCardStatus.Variant.InHand);
+        // TODO Don't make a new Necocard!
     }
 
     private void UpdateSpaceHoverTexture()

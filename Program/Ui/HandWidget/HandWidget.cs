@@ -26,7 +26,7 @@ public partial class HandWidget : Control
 				continue;
 			}
 
-			var button = UnitButton.Instantiate(new NecoCard(card.CardModel));
+			var button = UnitButton.Instantiate(new NecoUnitCard((NecoUnitCardModel)card.CardModel));
 			button.Pressed += () => EmitSignal(nameof(UnitPressed), card);
 			Grid.AddChild(button);
 		}	
