@@ -35,8 +35,9 @@ public partial class CardOptionLine : HBoxContainer
 		var permission = Card.CardModel.OptionPermissions.Single(p => p.Identifier == OptionId);
 
 		OptionName.Text = permission.Identifier;
-		foreach (var opt in permission.AllowedValues) {
-			OptionDropdown.AddItem(opt.ToString(), OptionValues.Count);
+		foreach (var (opt, optDisplay) in permission.AllowedValues.Select(v => (v, permission.AllowedValueVisual(v)))) {
+//			if (permission.GetType().Attributes)
+			OptionDropdown.AddItem(optDisplay, OptionValues.Count);
 			OptionValues.Add(opt);
 		}
 

@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://bi6rqt4crtsmn"]
+
+[ext_resource type="Texture2D" uid="uid://2oteyags16rc" path="res://Assets/Unit/Pebble/Pebble.png" id="1_w2vvc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7mgao"]
+atlas = ExtResource("1_w2vvc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4afkd"]
+atlas = ExtResource("1_w2vvc")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xygq0"]
+atlas = ExtResource("1_w2vvc")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xiyaa"]
+atlas = ExtResource("1_w2vvc")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7mgao")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4afkd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xygq0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xiyaa")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

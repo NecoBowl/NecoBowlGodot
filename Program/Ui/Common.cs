@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 using Godot;
@@ -29,5 +30,21 @@ public static class GodotExt
             node.RemoveChild(child);
             child.QueueFree();
         }
+    }
+    
+    /// <summary>
+    /// Recursively finds each child node and flattens.
+    /// </summary>
+    /// <returns>All children of the node.</returns>
+    /// TODO THis will perform horribly, replace asap
+    public static IEnumerable<Node> GetChildrenRecursive(this Node node)
+    {
+        var list = new List<Node>();
+        foreach (var child in node.GetChildren()) {
+            list.Add(child); 
+            list.AddRange(child.GetChildrenRecursive());
+        }
+
+        return list;
     }
 }

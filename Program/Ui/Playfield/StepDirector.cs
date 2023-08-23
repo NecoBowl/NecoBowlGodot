@@ -16,7 +16,8 @@ public partial class StepDirector : Node
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
     private Dictionary<Sprite2D, Vector2> PositionModifications = new();
-    
+    private Queue<IEnumerable<NecoPlayfieldMutation>> MutationListQueue = new();
+
     private Playfield Playfield;
     private List<DirectorTween> ActiveTweens = new();
 
@@ -60,6 +61,12 @@ public partial class StepDirector : Node
                 tween.Tween.TweenProperty(space.PlayUnitDisplay, "position", bumpMut.Direction.ToGodotVector2() * 15, 0.25f);
                 tween.Tween.TweenProperty(space.PlayUnitDisplay, "position", Vector2.Zero, 0.25f);
             }
+            
+            else if (mut is NecoPlayfieldMutation.UnitHandsOffItem handoffMut) {
+                var sourceSpace = unitIdMap[handoffMut.Subject];
+                var recvSpace = unitIdMap[handoffMut.Receiver];
+                var particle = sourceSpace.PlayUnitDisplay!.ParticlesPickup;
+            }
         }
     }
 
@@ -86,12 +93,12 @@ public partial class StepDirector : Node
 
     private record class DirectorTween(NecoUnitId UnitId, Tween Tween)
     {
-        public void CombatTween(PlayfieldSpace unit1Space, PlayfieldSpace unit2Space)
+        public void CombatTween(PlayfieldSpace unit1Space, PlayfieldSpace destSpace)
         {
             var startingPos = unit1Space.GlobalPosition;
             Tween.TweenProperty(unit1Space.PlayUnitDisplay,
                 "position",
-                unit1Space.GlobalPosition.DirectionTo(unit2Space.GlobalPosition) * 10,
+                unit1Space.GlobalPosition.DirectionTo(destSpace.GlobalPosition) * 10,
                 0.09f);
             Tween.Chain().TweenProperty(unit1Space.PlayUnitDisplay,
                     "global_position",

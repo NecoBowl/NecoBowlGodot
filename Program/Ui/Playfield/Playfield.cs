@@ -103,15 +103,11 @@ public partial class Playfield : Control
 
     private void UpdateControls()
     {
-        switch (CurrentState) {
-            case PlayfieldState.Plan:
-                StepButton.Visible = false;
-                StartButton.Visible = true;
-                break;
-            case PlayfieldState.Play:
-                StepButton.Visible = true;
-                StartButton.Visible = false;
-                break;
+        foreach (var node in this.GetChildrenRecursive().OfType<Control>().Where(n => n.IsInGroup("ui_PlanPhase"))) {
+            node.Visible = CurrentState == PlayfieldState.Plan;
+        }
+        foreach (var node in this.GetChildrenRecursive().OfType<Control>().Where(n => n.IsInGroup("ui_PlayPhase"))) {
+            node.Visible = CurrentState == PlayfieldState.Play;
         }
     }
 
@@ -196,7 +192,9 @@ public partial class Playfield : Control
     private void SetStepTimer()
     {
         var timer = GetTree().CreateTimer(0.5f);
-        timer.Timeout += StartStep;
+        timer.Timeout += () => {
+            if (CurrentState == PlayfieldState.Play) StartStep();
+        };
     }
 
     private void OnCardSelected(Asset.Card card)

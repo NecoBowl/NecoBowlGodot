@@ -72,29 +72,29 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="HBoxContainer/PanelCenter"]
+[node name="StartButton" type="Button" parent="HBoxContainer/PanelCenter" groups=["ui_PlanPhase"]]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
 text = "Start"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelCenter"]
+[node name="StepButtonGroup" type="HBoxContainer" parent="HBoxContainer/PanelCenter" groups=["ui_PlayPhase"]]
 layout_mode = 2
 
-[node name="StepButton" type="Button" parent="HBoxContainer/PanelCenter/HBoxContainer"]
+[node name="StepButton" type="Button" parent="HBoxContainer/PanelCenter/StepButtonGroup"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Step"
 
-[node name="AutoplayToggle" type="CheckBox" parent="HBoxContainer/PanelCenter/HBoxContainer"]
+[node name="AutoplayToggle" type="CheckBox" parent="HBoxContainer/PanelCenter/StepButtonGroup"]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Autoplay"
 
-[node name="EndPlayButton" type="Button" parent="HBoxContainer/PanelCenter"]
+[node name="EndPlayButton" type="Button" parent="HBoxContainer/PanelCenter" groups=["ui_PlayPhase"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3

@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dpjsr1rwbogp2"]
+
+[ext_resource type="Texture2D" uid="uid://cg7pfbprwpqn4" path="res://Assets/Unit/Donkey/DimwittedDonkeyIdleSide.png" id="1_8bcgv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_msmy7"]
+atlas = ExtResource("1_8bcgv")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_clmbc"]
+atlas = ExtResource("1_8bcgv")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i0muk"]
+atlas = ExtResource("1_8bcgv")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rbd32"]
+atlas = ExtResource("1_8bcgv")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_msmy7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_clmbc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i0muk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rbd32")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

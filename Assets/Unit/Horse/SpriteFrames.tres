@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://b0wl6elk4rrk0"]
+
+[ext_resource type="Texture2D" uid="uid://ch7t6x0ib56ia" path="res://Assets/Unit/Horse/ChestnutHorseIdleSide.png" id="1_rk8hj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ral7"]
+atlas = ExtResource("1_rk8hj")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o7qw8"]
+atlas = ExtResource("1_rk8hj")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_16ptp"]
+atlas = ExtResource("1_rk8hj")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xb5on"]
+atlas = ExtResource("1_rk8hj")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ral7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o7qw8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_16ptp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xb5on")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

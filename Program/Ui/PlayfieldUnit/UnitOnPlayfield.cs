@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using neco_soft.NecoBowlCore.Action;
 using neco_soft.NecoBowlCore.Input;
@@ -8,6 +9,9 @@ namespace neco_soft.NecoBowlGodot.Program.Ui.Playfield;
 
 public partial class UnitOnPlayfield : Control
 {
+    [Export]
+    public Color MaxHealthTextColor = Colors.LawnGreen;
+    
     public static UnitOnPlayfield Instantiate(NecoUnitInformation unit)
     {
         var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<UnitOnPlayfield>();
@@ -36,6 +40,10 @@ public partial class UnitOnPlayfield : Control
         var scale = Math.Min(scaleX, scaleY);
         UnitSprite.Scale = new(scale, scale);
         UnitPower.Text = unit.Power.ToString();
+
+        if (unit.CurrentHealth == unit.MaxHealth) {
+            UnitHealth.AddThemeColorOverride("default_color", MaxHealthTextColor);
+        }
         UnitHealth.Text = unit.CurrentHealth != unit.MaxHealth
             ? $"{unit.CurrentHealth} / {unit.MaxHealth}"
             : $"{unit.CurrentHealth}";

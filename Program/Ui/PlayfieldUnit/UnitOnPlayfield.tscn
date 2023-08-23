@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://hxgdjh2lbwfo"]
+[gd_scene load_steps=9 format=3 uid="uid://hxgdjh2lbwfo"]
 
 [ext_resource type="Script" path="res://Program/Ui/PlayfieldUnit/UnitOnPlayfield.cs" id="1_gqhw7"]
 [ext_resource type="Script" path="res://Program/Ui/PlayfieldUnit/UnitOnPlayfield_SpriteRoot.cs" id="2_tddry"]
@@ -13,6 +13,9 @@ point_count = 2
 [sub_resource type="Gradient" id="Gradient_ahyyj"]
 offsets = PackedFloat32Array(0, 0.456204)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_j81rx"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.0784314)
 
 [node name="UnitOnPlayfield" type="Control"]
 custom_minimum_size = Vector2(48, 48)
@@ -52,6 +55,25 @@ scale_amount_max = 12.0
 scale_amount_curve = SubResource("Curve_70wj6")
 color_ramp = SubResource("Gradient_ahyyj")
 
+[node name="ParticlesHandoff" type="CPUParticles2D" parent="SpriteRoot"]
+emitting = false
+amount = 4
+lifetime = 0.25
+one_shot = true
+texture = ExtResource("4_ho6v2")
+spread = 0.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+linear_accel_min = 250.0
+linear_accel_max = 250.0
+angle_min = 15.0
+angle_max = 50.0
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+color = Color(1, 1, 1, 0.45098)
+color_ramp = SubResource("Gradient_j81rx")
+
 [node name="UnitHealth" type="RichTextLabel" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -65,7 +87,7 @@ offset_top = -23.0
 grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("3_veth6")
-text = "5/10"
+text = "5"
 fit_content = true
 autowrap_mode = 0
 
