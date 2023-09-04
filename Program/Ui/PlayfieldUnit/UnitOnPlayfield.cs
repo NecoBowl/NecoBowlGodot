@@ -4,6 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 
 using neco_soft.NecoBowlCore.Action;
 using neco_soft.NecoBowlCore.Input;
+using neco_soft.NecoBowlCore.Model;
+using neco_soft.NecoBowlDefinitions.Card;
+
+using Chicken = neco_soft.NecoBowlDefinitions.Unit.Chicken;
 
 namespace neco_soft.NecoBowlGodot.Program.Ui.Playfield;
 
@@ -11,12 +15,14 @@ public partial class UnitOnPlayfield : Control
 {
     [Export]
     public Color MaxHealthTextColor = Colors.LawnGreen;
-    
+
+    public AnimationPlayer AnimationPlayer => GetNode<AnimationPlayer>($"%{nameof(AnimationPlayer)}");
+
     public static UnitOnPlayfield Instantiate(NecoUnitInformation unit)
     {
         var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<UnitOnPlayfield>();
-        node.UnitInformation = unit;
         node.SetAnchorsPreset(LayoutPreset.FullRect);
+        node.UnitInformation = unit;
         return node;
     }
 
@@ -24,6 +30,12 @@ public partial class UnitOnPlayfield : Control
 
     public override void _Ready()
     {
+        if (UnitInformation is null) {
+            // TODO Expose some "default" UnitInformation so we don't have to return here
+            GD.PushWarning("no unit specified for UnitOnPlayfield, using default");
+            return;
+        }
+        
         Populate(UnitInformation);
         UnitSprite.Play();
     }

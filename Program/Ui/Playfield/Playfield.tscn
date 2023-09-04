@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4cyemjtawvte"]
+[gd_scene load_steps=5 format=3 uid="uid://d4cyemjtawvte"]
 
 [ext_resource type="Script" path="res://Program/Ui/Playfield/Playfield.cs" id="1_ytb7b"]
 [ext_resource type="PackedScene" uid="uid://cn5mvcst8kft4" path="res://Program/Ui/HandWidget/HandWidget.tscn" id="2_fy6xd"]
 [ext_resource type="PackedScene" uid="uid://bxdm5t1so4560" path="res://Program/Ui/CardInformationPanel/CardInformationPanel.tscn" id="3_ud7v1"]
+[ext_resource type="PackedScene" uid="uid://2sm3cxavtlt8" path="res://Program/Ui/Playfield/PlayLog.tscn" id="4_y4bnw"]
 
 [node name="Playfield" type="Control"]
 layout_mode = 3
@@ -100,16 +101,30 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "End Play"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+[node name="RightPanelTabs" type="TabContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tabs_visible = false
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/RightPanelTabs"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AllUnits" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("2_fy6xd")]
+[node name="AllUnits" parent="HBoxContainer/RightPanelTabs/VBoxContainer2" instance=ExtResource("2_fy6xd")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
 
-[node name="CardInfo" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_ud7v1")]
+[node name="CardInfo" parent="HBoxContainer/RightPanelTabs/VBoxContainer2" instance=ExtResource("3_ud7v1")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/RightPanelTabs"]
+visible = false
+layout_mode = 2
+
+[node name="PlayLog" parent="HBoxContainer/RightPanelTabs/VBoxContainer" instance=ExtResource("4_y4bnw")]
 unique_name_in_owner = true
 layout_mode = 2

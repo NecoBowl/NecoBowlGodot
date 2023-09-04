@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dsqwu0318lxyv"]
+
+[ext_resource type="Texture2D" uid="uid://brtrfaqwjt15h" path="res://Assets/Unit/Snake/EmeraldViperIdleSide.png" id="1_74l22"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfikv"]
+atlas = ExtResource("1_74l22")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1op2"]
+atlas = ExtResource("1_74l22")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6d2v"]
+atlas = ExtResource("1_74l22")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_58vy6"]
+atlas = ExtResource("1_74l22")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfikv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1op2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l6d2v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_58vy6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

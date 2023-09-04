@@ -8,6 +8,7 @@ using neco_soft.NecoBowlCore.Model;
 using neco_soft.NecoBowlCore.Tactics;
 using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program;
+using neco_soft.NecoBowlGodot.Program.ResourceTypes;
 using neco_soft.NecoBowlGodot.Program.Ui;
 using neco_soft.NecoBowlGodot.Program.Ui.CardInformationPanel;
 
@@ -17,24 +18,29 @@ public partial class Playfield : Control
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-    private NecoPlayInformation? Play = null!;
+    public NecoPlayInformation? Play = null!;
 	
     private Control SpaceLines => GetNode<Control>("%SpaceLines");
 
     private Button StepButton => GetNode<Button>("%StepButton");
     private Button StartButton => GetNode<Button>("%StartButton");
+    private PlayLog PlayLog => GetNode<PlayLog>($"%{nameof(PlayLog)}");
 
     private RichTextLabel MoneyDisplay => GetNode<RichTextLabel>("%MoneyDisplay");
     private CardInformationPanel CardInfo => GetNode<CardInformationPanel>($"%{nameof(CardInfo)}");
     private CheckBox AutoplayToggle => GetNode<CheckBox>($"%{nameof(AutoplayToggle)}");
     private Button EndPlayButton => GetNode<Button>($"%{nameof(EndPlayButton)}");
+    
+    public TabContainer RightPanelTabs => GetNode<TabContainer>($"%{nameof(RightPanelTabs)}");
 
     private CardPlayOptionMenu? CardPlayOptionMenu;
 
+    private StepDirector? Director = null;
+
     private PlayfieldState CurrentState => Play is null ? PlayfieldState.Plan : PlayfieldState.Play;
     private NecoUnitCardModel? SelectedCardModel = null;
-    private bool Autoplay = false;
-	
+    private bool Autoplay = true;
+
     public override void _Ready()
     {
         // Unit grid
@@ -48,12 +54,33 @@ public partial class Playfield : Control
 
         AutoplayToggle.Toggled += (state) => {
             Autoplay = state;
+
+            if (Autoplay) {
+                StepButton.Disabled = true;
+                if (Director is null) {
+                    StartStep();
+                }
+            } else {
+                StepButton.Disabled = false;
+            }
         };
         AutoplayToggle.ButtonPressed = Autoplay;
 
         EndPlayButton.Pressed += () => {
             ContextSingleton.Context.SendInput(new NecoInput.RequestEndPlay(ContextSingleton.Context.Players.Offense));
             ContextSingleton.Context.SendInput(new NecoInput.RequestEndPlay(ContextSingleton.Context.Players.Defense));
+            Populate();
+        };
+
+        PlayLog.RollbackRequested += (turn) => {
+            if (Play is null) {
+                Logger.Error("Rollback requested but no play is active");
+                return;
+            }
+            
+            Play.StepToFinish();
+            Play = ContextSingleton.Context.GetPlayPreview();
+            Play.Step((uint)turn);
             Populate();
         };
 
@@ -67,11 +94,21 @@ public partial class Playfield : Control
             throw new InvalidOperationException($"invalid state {CurrentState}");
         }
 
-        var mutations = Play!.Step();
-        StepDirector director = new StepDirector(this);
-        AddChild(director);
-        director.ApplyStep(mutations);
-        director.DirectorFinished += () => OnStepDirectorFinished(director);
+        StepButton.Disabled = true;
+
+        var mutations = Play!.Step().ToList();
+        Director = new(this);
+        AddChild(Director);
+        Director.ApplyStep(mutations);
+        Director.MutationFinished += OnStepDirectorMutationFinished;
+        Director.DirectorFinished += OnStepDirectorFinished;
+
+        PlayLog.AddStepHeaderLine((int)Play.StepCount);
+    }
+
+    private void OnStepDirectorMutationFinished(PlayfieldMutation mut)
+    {
+        PlayLog.AddLine(mut.Mutation, Play!.Field);
     }
 
     public Control GetGridSpace((int x, int y) coords)
@@ -96,9 +133,13 @@ public partial class Playfield : Control
         ContextSingleton.Context.FinishTurn();
         Play = ContextSingleton.Context.BeginPlay();
         Populate();
-        
+
+        RightPanelTabs.CurrentTab = 1;
+        PlayLog.ClearText();
+
         if (Autoplay)
-            StartStep();
+            CallDeferred(nameof(StartStep));
+//            StartStep();
     }
 
     private void UpdateControls()
@@ -119,7 +160,9 @@ public partial class Playfield : Control
     private void Populate()
     {
         if (Play?.IsFinished ?? false) {
+            // Play just finished.
             Play = null;
+            RightPanelTabs.CurrentTab = 0;
         }
         
         UpdateControls();
@@ -155,13 +198,18 @@ public partial class Playfield : Control
         UpdateSpaceHoverTexture();
     }
 
-    private void OnStepDirectorFinished(StepDirector director)
+    private void OnStepDirectorFinished()
     {
-        RemoveChild(director);
+        RemoveChild(Director);
+        Director!.QueueFree();
+        Director = null;
+        
         Populate();
 
         if (Autoplay) {
             SetStepTimer();
+        } else {
+            StepButton.Disabled = false;
         }
     }
 
@@ -191,9 +239,9 @@ public partial class Playfield : Control
 
     private void SetStepTimer()
     {
-        var timer = GetTree().CreateTimer(0.5f);
+        var timer = GetTree().CreateTimer(0.18f);
         timer.Timeout += () => {
-            if (CurrentState == PlayfieldState.Play) StartStep();
+            if (CurrentState == PlayfieldState.Play && Autoplay) StartStep();
         };
     }
 

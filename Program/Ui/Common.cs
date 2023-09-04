@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 using Godot;
@@ -13,7 +14,13 @@ internal static class Common
 {
     internal static string GetSceneFile([CallerFilePath] string path = null!)
         => $"res://{path.Split("NecoBowlGodot\\")[1].Replace("\\", "/").Replace(".cs", ".tscn")}";
-    
+
+    internal static string GetFileResDirectory([CallerFilePath] string path = null!)
+    {
+        var filePath = $"res://{path.Split("NecoBowlGodot\\")[1].Replace("\\", "/")}";
+        filePath = filePath.Substring(0, filePath.LastIndexOf("/"));
+        return filePath;
+    }
 }
 
 public static class GodotExt
