@@ -9,6 +9,7 @@ using neco_soft.NecoBowlCore.Tactics;
 using neco_soft.NecoBowlCore.Tags;
 using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program;
+using neco_soft.NecoBowlGodot.Program.Ui;
 
 public partial class CardOptionLine : HBoxContainer
 {
@@ -18,55 +19,70 @@ public partial class CardOptionLine : HBoxContainer
 		var line = scene.Instantiate<CardOptionLine>();
 		line.Card = card;
 		line.OptionId = optionId;
+		line.Permission = line.Card.CardModel.OptionPermissions.Single(p => p.Identifier == line.OptionId);
 		return line;
 	}
+	
+	[Export] public Theme? OptionItemButtonTheme = null;
 
 	private NecoCard Card = null!;
 	private string OptionId = null!;
+	private NecoCardOptionPermission Permission = null!;
 
 	private RichTextLabel OptionName => GetNode<RichTextLabel>("%OptionName");
-	private OptionButton OptionDropdown => GetNode<OptionButton>("%OptionDropdown");
+	private Container OptionItems => GetNode<Container>($"%{nameof(OptionItems)}");
 	
-	private readonly List<object> OptionValues = new();
-
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		var permission = Card.CardModel.OptionPermissions.Single(p => p.Identifier == OptionId);
+		OptionName.Text = Permission.Identifier;
 
-		OptionName.Text = permission.Identifier;
-		foreach (var (opt, optDisplay) in permission.AllowedValues.Select(v => (v, permission.AllowedValueVisual(v)))) {
-//			if (permission.GetType().Attributes)
-			OptionDropdown.AddItem(optDisplay, OptionValues.Count);
-			OptionValues.Add(opt);
-		}
+		var currentValue = Card.Options.GetValue(Permission.Identifier);
 
-		OptionDropdown.ItemSelected += (index) => {
-			var input = new NecoInput.SetPlanMod(
-				ContextSingleton.Context.Players[NecoPlayerRole.Offense],
-				Card,
-				OptionId,
-				OptionValues[(int)index]);
-			ContextSingleton.Context.SendInput(input);
-			
-			UpdateDropdownValue();
-		};
-	}
-
-	private void UpdateDropdownValue()
-	{
-		var selectedIndex = OptionValues.FindIndex(o => Card.Options[OptionId] == o);
-		if (selectedIndex == -1)
-			throw new InvalidOperationException($"invalid index in OptionValues ({selectedIndex})");
-		OptionDropdown.Selected = selectedIndex;
-	}
-
-	public void SetControlLock(bool locked)
-	{
-		if (locked) {
-			OptionDropdown.Disabled = true;
+		if (Permission.ArgumentType == typeof(bool)) {
+			PopulateBoolean((bool)currentValue!);
 		} else {
-			OptionDropdown.Disabled = false;
+			PopulateButtons(currentValue);
 		}
 	}
+
+	private void PopulateBoolean(bool currentValue)
+	{
+		OptionItems.RemoveAndFreeChildren();
+
+		var button = new CheckBox() { ButtonPressed = currentValue };
+		button.Pressed += () => SendInput(button.ButtonPressed);
+		
+		OptionItems.AddChild(button);
+	}
+	
+	private void PopulateButtons(object? currentValue)
+	{
+		OptionItems.RemoveAndFreeChildren();
+		
+		var buttonGroup = new ButtonGroup();
+		foreach (var (optionDisplay, optionValue) in Permission.GetOptionItems()) {
+			var button = new Button() {
+				Text = optionDisplay,
+				ButtonGroup = buttonGroup,
+				Flat = true,
+				Theme = OptionItemButtonTheme,
+				ToggleMode = true,
+				ButtonPressed = optionValue.Equals(currentValue)
+			};
+
+			button.Pressed += () => {
+				SendInput(optionValue);
+			};
+
+			OptionItems.AddChild(button);
+		}
+	}
+
+	private void SendInput(object optionValue)
+		=> ContextSingleton.Context.SendInput(new NecoInput.SetPlanMod(
+			ContextSingleton.Context.Players[NecoPlayerRole.Offense],
+			Card,
+			OptionId,
+			optionValue
+		));
 }

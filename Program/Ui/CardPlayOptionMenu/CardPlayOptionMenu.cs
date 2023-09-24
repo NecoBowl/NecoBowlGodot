@@ -18,7 +18,7 @@ public partial class CardPlayOptionMenu : PanelContainer
 		var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<CardPlayOptionMenu>();
 		return node;
 	}
-	
+
 	private RichTextLabel CardNameDisplay => GetNode<RichTextLabel>("%CardName");
 	private TextureRect CardIcon => GetNode<TextureRect>("%CardIcon");
 	private Control OptionsList => GetNode<Control>("%OptionList");
@@ -35,9 +35,6 @@ public partial class CardPlayOptionMenu : PanelContainer
 	private void AddOption(NecoCard card, string optionId)
 	{
 		var line = CardOptionLine.Instantiate(card, optionId);
-		if (ControlLock) {
-			line.SetControlLock(true);
-		}
 		OptionsList.AddChild(line);
 	}
 
@@ -51,14 +48,5 @@ public partial class CardPlayOptionMenu : PanelContainer
 		foreach (var (id, option) in card.Options) {
 			AddOption(card, id);
 		}
-	}
-
-	private void SetControlsLocked(bool locked)
-	{
-		foreach (var option in OptionsListContents) {
-			option.SetControlLock(locked);
-		}
-
-		ControlLock = locked;
 	}
 }

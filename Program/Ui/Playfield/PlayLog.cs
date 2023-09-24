@@ -4,7 +4,9 @@ using System.Text.RegularExpressions;
 
 using neco_soft.NecoBowlCore.Action;
 using neco_soft.NecoBowlCore.Input;
+using neco_soft.NecoBowlCore.Tactics;
 using neco_soft.NecoBowlGodot;
+using neco_soft.NecoBowlGodot.Program;
 using neco_soft.NecoBowlGodot.Program.Ui;
 
 using NLog;
@@ -14,6 +16,10 @@ public partial class PlayLog : MarginContainer
 	private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 	
 	[Signal] public delegate void RollbackRequestedEventHandler(int stepNumber);
+
+	[Export] public Color PlayerColor1 = Colors.CornflowerBlue;
+	[Export] public Color PlayerColor2 = Colors.OrangeRed;
+	[Export] public Color PlayerNeutralColor = Colors.Gray;
 
 	private CheckButton ScrollLockToggle => GetNode<CheckButton>($"%{nameof(ScrollLockToggle)}");
 	private Container LineContainer => GetNode<Container>($"%{nameof(LineContainer)}");
@@ -41,10 +47,6 @@ public partial class PlayLog : MarginContainer
 			BbcodeEnabled = true
 		};
 		LineContainer.AddChild(line);
-
-		if (ScrollLockToggle.ButtonPressed) {
-			CallDeferred(nameof(ScrollToBottom));
-		}
 	}
 
 	private void ScrollToBottom()
@@ -70,14 +72,22 @@ public partial class PlayLog : MarginContainer
 
 	public string CreateUnitBbcode(NecoUnitInformation unit)
 	{
-		return $"[img]{Asset.Unit.FromModel(unit.UnitModel).GetStaticSprite().ResourcePath}[/img] {unit.FullName}";
+		NecoPlayerRole? role = unit.OwnerId == default ? null : ContextSingleton.Context.Players.RoleOf(unit.OwnerId);
+		string colorStr = role == NecoPlayerRole.Offense ? PlayerColor1.ToHtml()
+			: role == NecoPlayerRole.Defense ? PlayerColor2.ToHtml()
+			: PlayerNeutralColor.ToHtml();
+		return $"[img]{Asset.Unit.FromModel(unit.UnitModel).GetStaticSprite().ResourcePath}[/img] [color={colorStr}]{unit.FullName}[/color]";
 	}
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		MaxVerticalScroll = ScrollContainer.GetVScrollBar().MaxValue;
-		ScrollContainer.GetVScrollBar().Changed += ScrollToBottom;
+		ScrollContainer.GetVScrollBar().Changed += () => {
+			if (ScrollLockToggle.ButtonPressed) {
+				ScrollToBottom();
+			}
+		};
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

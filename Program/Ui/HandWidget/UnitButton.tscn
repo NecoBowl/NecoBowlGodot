@@ -5,7 +5,7 @@
 
 [node name="Control" type="Button"]
 texture_filter = 1
-custom_minimum_size = Vector2(100, 180)
+custom_minimum_size = Vector2(80, 100)
 offset_right = 8.0
 offset_bottom = 8.0
 script = ExtResource("1_kgb8j")
@@ -20,22 +20,11 @@ grow_vertical = 2
 
 [node name="CardIcon" type="TextureRect" parent="Contents"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 3
 texture = ExtResource("1_f58qs")
-expand_mode = 4
-stretch_mode = 5
-
-[node name="CardName" type="RichTextLabel" parent="Contents"]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-bbcode_enabled = true
-text = "Distinguished Crab with a Long Name"
-fit_content = true
-scroll_active = false
-autowrap_mode = 2
+expand_mode = 2
 
 [node name="CardCost" type="RichTextLabel" parent="Contents"]
 unique_name_in_owner = true
