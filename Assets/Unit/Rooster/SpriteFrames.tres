@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://duyq034ddxxjb"]
+
+[ext_resource type="Texture2D" uid="uid://durcwdasdwgud" path="res://Assets/Unit/Rooster/Rooster.png" id="1_lrkvw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56vpg"]
+atlas = ExtResource("1_lrkvw")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uyauu"]
+atlas = ExtResource("1_lrkvw")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_amc8e"]
+atlas = ExtResource("1_lrkvw")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2pypy"]
+atlas = ExtResource("1_lrkvw")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56vpg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uyauu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_amc8e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2pypy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
