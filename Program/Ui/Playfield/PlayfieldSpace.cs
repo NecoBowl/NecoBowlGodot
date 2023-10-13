@@ -1,21 +1,18 @@
 using Godot;
 using System;
-using System.Reflection;
 
-using neco_soft.NecoBowlCore.Action;
-using neco_soft.NecoBowlCore.Input;
-using neco_soft.NecoBowlCore.Tactics;
-using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program.Ui;
 using neco_soft.NecoBowlGodot.Program.Ui.Playfield;
-
+using NecoBowl.Core.Reports;
+using NecoBowl.Core.Sport.Tactics;
 using NLog;
+using Asset = neco_soft.NecoBowlGodot.Program.Loader.Asset;
 
 public partial class PlayfieldSpace : TextureButton
 {
 	private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-	public static PlayfieldSpace InstantiateForPlan(NecoPlan.CardPlay? cardPlay, (int, int) coords, NecoPlayerRole? playerRole)
+	public static PlayfieldSpace InstantiateForPlan(Plan.CardPlay? cardPlay, (int, int) coords, NecoPlayerRole? playerRole)
 	{
 		var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<PlayfieldSpace>(); node.CardPlay = cardPlay;
 		node.Coords = coords;
@@ -27,7 +24,7 @@ public partial class PlayfieldSpace : TextureButton
 		return node;
 	}
 	
-	public static PlayfieldSpace InstantiateForPlay(NecoSpaceInformation contents, (int, int) coords)
+	public static PlayfieldSpace InstantiateForPlay(Space contents, (int, int) coords)
 	{
 		var node = GD.Load<PackedScene>("res://Program/Ui/Playfield/PlayfieldSpace.tscn")
 			.Instantiate<PlayfieldSpace>();
@@ -44,12 +41,12 @@ public partial class PlayfieldSpace : TextureButton
 	public (int x, int y) Coords { get; private set; }
 
 	public NecoPlayerRole? PlayerRole {
-		get => SpaceContents is null ? _playerRole : SpaceContents.PlayerRole;
+		get => SpaceContents is null ? _playerRole : SpaceContents.Role;
 		private set => _playerRole = value;
 	}
 
-	private NecoPlan.CardPlay? CardPlay = null!;
-	public NecoSpaceInformation? SpaceContents { get; private set; } = null!;
+	private Plan.CardPlay? CardPlay = null!;
+	public Space? SpaceContents { get; private set; } = null!;
 	private PlayfieldState State;
 	private NecoPlayerRole? _playerRole = null!;
 	

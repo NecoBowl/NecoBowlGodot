@@ -4,8 +4,7 @@ using System.Runtime.CompilerServices;
 
 using Godot;
 
-using neco_soft.NecoBowlCore;
-
+using NecoBowl.Core;
 using NLog;
 
 namespace neco_soft.NecoBowlGodot.Program.Ui;

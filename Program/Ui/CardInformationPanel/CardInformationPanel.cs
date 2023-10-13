@@ -1,10 +1,8 @@
 using System.Net.Mime;
 
 using Godot;
-
-using neco_soft.NecoBowlCore.Model;
-using neco_soft.NecoBowlCore.Tactics;
-
+using NecoBowl.Core.Model;
+using NecoBowl.Core.Tactics;
 using NLog;
 
 namespace neco_soft.NecoBowlGodot.Program.Ui.CardInformationPanel;
@@ -32,7 +30,7 @@ public partial class CardInformationPanel : Control
         UnitPlacementInfoTabs.CurrentTab = 1;
     }
     
-    public void UpdateFromCard(NecoCard card, CardInformationPanel_NodeCardStatus.Variant cardSource)
+    public void UpdateFromCard(Card card, CardInformationPanel_NodeCardStatus.Variant cardSource)
     {
         
         LabelCardName.Text = card.Name;
@@ -45,7 +43,7 @@ public partial class CardInformationPanel : Control
         UnitPlacementInfoTabs.CurrentTab = 0;
     }
 
-    private void UpdateFromUnitCard(NecoUnitCard unitCard)
+    private void UpdateFromUnitCard(UnitCard unitCard)
     {
         void UpdateItemList()
         {
@@ -59,11 +57,11 @@ public partial class CardInformationPanel : Control
         
         LabelCost.Text = unitCard.Cost.ToString();
         LabelStats.Text = LabelStats_GenerateText(unitCard!.UnitModel);
-        TextureRectIcon.Texture = Asset.Card.From(unitCard).Icon;
+        TextureRectIcon.Texture = Loader.Asset.Card.From(unitCard).Icon;
         LabelBehavior.Text = unitCard.UnitModel.BehaviorDescription;
         UpdateItemList();
     }
 
-    private static string LabelStats_GenerateText(NecoUnitModel model)
+    private static string LabelStats_GenerateText(UnitModel model)
         => $"[color=red]{model.Power}[/color] / [color=aqua]{model.Health}[/color]";
 }

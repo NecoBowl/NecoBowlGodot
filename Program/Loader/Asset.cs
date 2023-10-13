@@ -1,14 +1,10 @@
-using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using neco_soft.NecoBowlCore.Model;
-using neco_soft.NecoBowlCore.Tactics;
+using Godot;
 using neco_soft.NecoBowlDefinitions;
-using neco_soft.NecoBowlDefinitions.Card;
+using NecoBowl.Core.Model;
 
-namespace neco_soft.NecoBowlGodot;
+namespace neco_soft.NecoBowlGodot.Program.Loader;
 
 public static partial class Asset
 {
@@ -17,13 +13,13 @@ public static partial class Asset
         private const string HomeDirectoryUnits = "res://Assets/Unit";
         
         public static IEnumerable<Asset.Unit> All => NecoDefinitions.AllUnitModels.Select(m => new Unit(m));
-        public static Asset.Unit FromModel(NecoUnitModel model) => All.Single(m => m.UnitModel == model);
+        public static Asset.Unit FromModel(UnitModel model) => All.Single(m => m.UnitModel == model);
 
         private string AssetDirectory => $"{HomeDirectoryUnits}/{UnitModel.GetType().Name}";
 
-        public readonly NecoUnitModel UnitModel;
+        public readonly UnitModel UnitModel;
         
-        private Unit(NecoUnitModel unitModel)
+        private Unit(UnitModel unitModel)
         {
             UnitModel = unitModel;
         }
@@ -41,24 +37,24 @@ public static partial class Asset
         
         public static IEnumerable<Asset.Card> All => NecoDefinitions.AllCardModels.Select(m => new Card(m));
 
-        public readonly NecoCardModel CardModel;
+        public readonly CardModel CardModel;
 
         public Texture2D Icon
-            => CardModel is NecoUnitCardModel unitCard
+            => CardModel is UnitCardModel unitCard
                 ? Asset.Unit.FromModel(unitCard.Model).GetStaticSprite()
                 : new PlaceholderTexture2D();
 
-        public static Card From(NecoCard card)
+        public static Card From(NecoBowl.Core.Tactics.Card card)
         {
             return All.Single(c => card.CardModel == c.CardModel);
         }
 
-        public static Card From(NecoCardModel cardModel)
+        public static Card From(CardModel cardModel)
         {
             return All.Single(c => cardModel == c.CardModel);
         }
 
-        private Card(NecoCardModel cardModel)
+        private Card(CardModel cardModel)
         {
             CardModel = cardModel;
         }

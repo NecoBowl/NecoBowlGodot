@@ -3,22 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using neco_soft.NecoBowlCore.Input;
-using neco_soft.NecoBowlCore.Model;
-using neco_soft.NecoBowlCore.Tactics;
-using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program;
 using neco_soft.NecoBowlGodot.Program.ResourceTypes;
 using neco_soft.NecoBowlGodot.Program.Ui;
 using neco_soft.NecoBowlGodot.Program.Ui.CardInformationPanel;
-
+using NecoBowl.Core.Input;
+using NecoBowl.Core.Model;
+using NecoBowl.Core.Reports;
+using NecoBowl.Core.Sport.Tactics;
+using NecoBowl.Core.Tactics;
 using NLog;
+using Asset = neco_soft.NecoBowlGodot.Program.Loader.Asset;
 
 public partial class Playfield : Control
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-    public NecoPlayInformation? Play = null!;
+    public Play? Play = null!;
 	
     private Control SpaceLines => GetNode<Control>("%SpaceLines");
 
@@ -38,7 +39,7 @@ public partial class Playfield : Control
     private StepDirector? Director = null;
 
     private PlayfieldState CurrentState => Play is null ? PlayfieldState.Plan : PlayfieldState.Play;
-    private NecoUnitCardModel? SelectedCardModel = null;
+    private CardModel? SelectedCardModel = null;
     private bool Autoplay = true;
 
     public override void _Ready()
@@ -78,8 +79,7 @@ public partial class Playfield : Control
                 return;
             }
             
-            Play.StepToFinish();
-            Play = ContextSingleton.Context.GetPlayPreview();
+            Play = ContextSingleton.Context.GetPlay();
             Play.Step((uint)turn);
             Populate();
         };
@@ -96,7 +96,7 @@ public partial class Playfield : Control
 
         StepButton.Disabled = true;
 
-        var mutations = Play!.Step().ToList();
+        var mutations = Play!.Step();
         Director = new(this);
         AddChild(Director);
         Director.ApplyStep(mutations);
@@ -108,7 +108,7 @@ public partial class Playfield : Control
 
     private void OnStepDirectorMutationFinished(PlayfieldMutation mut)
     {
-        PlayLog.AddLine(mut.Mutation, Play!.Field);
+        PlayLog.AddLine(mut.Mutation, Play!.GetPlayfield());
     }
 
     public Control GetGridSpace((int x, int y) coords)
@@ -131,7 +131,7 @@ public partial class Playfield : Control
     private void StartPlay()
     {
         ContextSingleton.Context.FinishTurn();
-        Play = ContextSingleton.Context.BeginPlay();
+        Play = ContextSingleton.Context.GetPlay();
         Populate();
 
         RightPanelTabs.CurrentTab = 1;
@@ -139,7 +139,6 @@ public partial class Playfield : Control
 
         if (Autoplay)
             CallDeferred(nameof(StartStep));
-//            StartStep();
     }
 
     private void UpdateControls()
@@ -179,12 +178,12 @@ public partial class Playfield : Control
                 PlayfieldSpace space;
                 
                 if (CurrentState == PlayfieldState.Plan) {
-                    var turn = ContextSingleton.Context.GetTurn();
+                    var turn = ContextSingleton.Context.GetPlan(NecoPlayerRole.Offense);
                     var cardPlay = turn.CardPlayAt((x, y));
                     space = PlayfieldSpace.InstantiateForPlan(cardPlay, (x, y), fieldParams.GetPlayerAffiliation((x, y)));
                     space.Pressed += () => OnSpacePressed(space);
                 } else if (CurrentState == PlayfieldState.Play) {
-                    var field = Play!.Field;
+                    var field = Play!.GetPlayfield();
                     space = PlayfieldSpace.InstantiateForPlay(field[x, y], (x, y));
                 } else {
                     throw new ApplicationException("invalid state");
@@ -222,11 +221,11 @@ public partial class Playfield : Control
             var playerId = ContextSingleton.Context.Players[space.PlayerRole!.Value];
             ContextSingleton.Context.SendInput(new NecoInput.PlaceCard(
                 playerId,
-                new NecoUnitCard(SelectedCardModel),
+                new Card(SelectedCardModel),
                 space.Coords));
             DeselectCard();
         } else {
-            var cardPlay = ContextSingleton.Context.GetTurn().CardPlayAt(space.Coords);
+            var cardPlay = ContextSingleton.Context.GetPlan(NecoPlayerRole.Offense).CardPlayAt(space.Coords);
             if (cardPlay is not null) {
                 CardPlayOptionMenu = CardPlayOptionMenu.Instantiate();
                 AddChild(CardPlayOptionMenu);
@@ -250,10 +249,9 @@ public partial class Playfield : Control
         if (CurrentState != PlayfieldState.Plan)
             return;
         
-        SelectedCardModel = (NecoUnitCardModel)card.CardModel;
+        SelectedCardModel = card.CardModel;
         UpdateSpaceHoverTexture();
-        CardInfo.UpdateFromCard(new NecoUnitCard((NecoUnitCardModel)card.CardModel), CardInformationPanel_NodeCardStatus.Variant.InHand);
-        // TODO Don't make a new Necocard!
+        CardInfo.UpdateFromCard(new Card((UnitCardModel)card.CardModel), CardInformationPanel_NodeCardStatus.Variant.InHand);
     }
 
     private void UpdateSpaceHoverTexture()

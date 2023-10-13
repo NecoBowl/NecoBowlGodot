@@ -2,14 +2,13 @@ using Godot;
 using System;
 using System.Text.RegularExpressions;
 
-using neco_soft.NecoBowlCore.Action;
-using neco_soft.NecoBowlCore.Input;
-using neco_soft.NecoBowlCore.Tactics;
-using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program;
 using neco_soft.NecoBowlGodot.Program.Ui;
-
+using NecoBowl.Core.Machine;
+using NecoBowl.Core.Reports;
+using NecoBowl.Core.Sport.Tactics;
 using NLog;
+using Asset = neco_soft.NecoBowlGodot.Program.Loader.Asset;
 
 public partial class PlayLog : MarginContainer
 {
@@ -37,7 +36,7 @@ public partial class PlayLog : MarginContainer
 		LineContainer.AddChild(scene);
 	}
 
-	public void AddLine(NecoPlayfieldMutation mutation, NecoFieldInformation field)
+	public void AddLine(BaseMutation mutation, NecoBowl.Core.Reports.Playfield field)
 	{
 		var line = new RichTextLabel() {
 			Text = ParseMutationDescription(mutation.Description, field),
@@ -57,7 +56,7 @@ public partial class PlayLog : MarginContainer
 		}
 	}
 
-	public string ParseMutationDescription(string mutationDescription, NecoFieldInformation field)
+	public string ParseMutationDescription(string mutationDescription, NecoBowl.Core.Reports.Playfield field)
 	{
 		var matches = NecoUnitId.StringIdRegex.Matches(mutationDescription);
 		var sb = mutationDescription;
@@ -70,7 +69,7 @@ public partial class PlayLog : MarginContainer
 		return sb;
 	}
 
-	public string CreateUnitBbcode(NecoUnitInformation unit)
+	public string CreateUnitBbcode(Unit unit)
 	{
 		NecoPlayerRole? role = unit.OwnerId == default ? null : ContextSingleton.Context.Players.RoleOf(unit.OwnerId);
 		string colorStr = role == NecoPlayerRole.Offense ? PlayerColor1.ToHtml()

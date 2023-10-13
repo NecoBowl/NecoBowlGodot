@@ -3,17 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using neco_soft.NecoBowlCore.Action;
-using neco_soft.NecoBowlCore.Input;
-using neco_soft.NecoBowlCore.Tactics;
-using neco_soft.NecoBowlCore.Tags;
-using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program;
 using neco_soft.NecoBowlGodot.Program.Ui;
+using NecoBowl.Core.Input;
+using NecoBowl.Core.Sport.Tactics;
+using NecoBowl.Core.Tactics;
+using NecoBowl.Core.Tags;
 
 public partial class CardOptionLine : HBoxContainer
 {
-	public static CardOptionLine Instantiate(NecoCard card, string optionId)
+	public static CardOptionLine Instantiate(Card card, string optionId)
 	{
 		var scene = GD.Load<PackedScene>("Program/Ui/CardPlayOptionMenu/CardOptionLine.tscn");
 		var line = scene.Instantiate<CardOptionLine>();
@@ -25,9 +24,9 @@ public partial class CardOptionLine : HBoxContainer
 	
 	[Export] public Theme? OptionItemButtonTheme = null;
 
-	private NecoCard Card = null!;
+	private Card Card = null!;
 	private string OptionId = null!;
-	private NecoCardOptionPermission Permission = null!;
+	private CardOptionPermission Permission = null!;
 
 	private RichTextLabel OptionName => GetNode<RichTextLabel>("%OptionName");
 	private Container OptionItems => GetNode<Container>($"%{nameof(OptionItems)}");

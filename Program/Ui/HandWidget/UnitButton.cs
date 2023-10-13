@@ -1,20 +1,19 @@
 using Godot;
-using System;
 
-using neco_soft.NecoBowlCore.Tactics;
-using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program.Ui;
+using NecoBowl.Core.Tactics;
+using Asset = neco_soft.NecoBowlGodot.Program.Loader.Asset;
 
 public partial class UnitButton : Button
 {
-	public static UnitButton Instantiate(NecoCard card)
+	public static UnitButton Instantiate(Card card)
 	{
 		var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<UnitButton>();
 		node.Card = card;
 		return node;
 	}
 
-	public NecoCard Card { get; private set; } = null!;
+	public Card Card { get; private set; } = null!;
 
 	public override void _Ready()
 	{

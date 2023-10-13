@@ -1,4 +1,4 @@
-using neco_soft.NecoBowlCore.Input;
+using NecoBowl.Core;
 
 namespace neco_soft.NecoBowlGodot.Program;
 

@@ -1,12 +1,7 @@
 using Godot;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
-using neco_soft.NecoBowlCore.Action;
-using neco_soft.NecoBowlCore.Input;
-using neco_soft.NecoBowlCore.Model;
-using neco_soft.NecoBowlDefinitions.Card;
-
+using NecoBowl.Core.Reports;
 using Chicken = neco_soft.NecoBowlDefinitions.Unit.Chicken;
 
 namespace neco_soft.NecoBowlGodot.Program.Ui.Playfield;
@@ -18,7 +13,7 @@ public partial class UnitOnPlayfield : Control
 
     public AnimationPlayer AnimationPlayer => GetNode<AnimationPlayer>($"%{nameof(AnimationPlayer)}");
 
-    public static UnitOnPlayfield Instantiate(NecoUnitInformation unit)
+    public static UnitOnPlayfield Instantiate(Unit unit)
     {
         var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<UnitOnPlayfield>();
         node.SetAnchorsPreset(LayoutPreset.FullRect);
@@ -26,7 +21,7 @@ public partial class UnitOnPlayfield : Control
         return node;
     }
 
-    private NecoUnitInformation UnitInformation = null!;
+    private Unit? UnitInformation = null!;
 
     public override void _Ready()
     {
@@ -45,9 +40,9 @@ public partial class UnitOnPlayfield : Control
     private RichTextLabel UnitHealth => GetNode<RichTextLabel>("%UnitHealth");
     public CpuParticles2D ParticlesPickup => GetNode<CpuParticles2D>($"%{nameof(ParticlesPickup)}");
 
-    public void Populate(NecoUnitInformation unit)
+    public void Populate(Unit unit)
     {
-        UnitSprite.SpriteFrames = Asset.Unit.FromModel(unit.UnitModel).GetSpriteFrames();
+        UnitSprite.SpriteFrames = Loader.Asset.Unit.FromModel(unit.UnitModel).GetSpriteFrames();
         var (scaleX, scaleY) = Size / UnitSprite.SpriteFrames.GetFrameTexture("default", 0).GetSize();
         var scale = Math.Min(scaleX, scaleY);
         UnitSprite.Scale = new(scale, scale);

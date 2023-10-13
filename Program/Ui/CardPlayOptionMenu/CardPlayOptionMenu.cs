@@ -3,13 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using neco_soft.NecoBowlCore.Action;
-using neco_soft.NecoBowlCore.Model;
-using neco_soft.NecoBowlCore.Tactics;
-using neco_soft.NecoBowlCore.Tags;
-using neco_soft.NecoBowlDefinitions.Unit;
-using neco_soft.NecoBowlGodot;
 using neco_soft.NecoBowlGodot.Program.Ui;
+using NecoBowl.Core.Tactics;
+using Asset = neco_soft.NecoBowlGodot.Program.Loader.Asset;
 
 public partial class CardPlayOptionMenu : PanelContainer
 {
@@ -32,13 +28,13 @@ public partial class CardPlayOptionMenu : PanelContainer
 		OptionsList.RemoveAndFreeChildren();
 	}
 
-	private void AddOption(NecoCard card, string optionId)
+	private void AddOption(Card card, string optionId)
 	{
 		var line = CardOptionLine.Instantiate(card, optionId);
 		OptionsList.AddChild(line);
 	}
 
-	public void PopulateWithCard(NecoCard card)
+	public void PopulateWithCard(Card card)
 	{
 		CardIcon.Texture = Asset.Card.From(card).Icon;
 		CardNameDisplay.Text = card.CardModel.Name;
