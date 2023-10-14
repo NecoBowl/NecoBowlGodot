@@ -32,10 +32,9 @@ public partial class CardInformationPanel : Control
     
     public void UpdateFromCard(Card card, CardInformationPanel_NodeCardStatus.Variant cardSource)
     {
-        
         LabelCardName.Text = card.Name;
-        if (card.IsUnitCard(out var unitCard)) {
-            UpdateFromUnitCard(unitCard!);
+        if (card.IsUnitCard()) {
+            UpdateFromUnitCard(card, ((UnitCardModel)card.CardModel).Model);
         }
 
         PanelCardInformation.VariantKind = cardSource;
@@ -43,22 +42,22 @@ public partial class CardInformationPanel : Control
         UnitPlacementInfoTabs.CurrentTab = 0;
     }
 
-    private void UpdateFromUnitCard(UnitCard unitCard)
+    private void UpdateFromUnitCard(Card card, UnitModel unitModel)
     {
         void UpdateItemList()
         {
             while (ItemListTags.ItemCount > 0) {
                 ItemListTags.RemoveItem(0);
             }
-            foreach (var tag in unitCard.UnitModel.Tags) {
+            foreach (var tag in unitModel.Tags) {
                 ItemListTags.AddItem(tag.ToString(), null);
             }
         }
         
-        LabelCost.Text = unitCard.Cost.ToString();
-        LabelStats.Text = LabelStats_GenerateText(unitCard!.UnitModel);
-        TextureRectIcon.Texture = Loader.Asset.Card.From(unitCard).Icon;
-        LabelBehavior.Text = unitCard.UnitModel.BehaviorDescription;
+        LabelCost.Text = card.Cost.ToString();
+        LabelStats.Text = LabelStats_GenerateText(unitModel);
+        TextureRectIcon.Texture = Loader.Asset.Card.From(card).Icon;
+        LabelBehavior.Text = unitModel.BehaviorDescription;
         UpdateItemList();
     }
 
