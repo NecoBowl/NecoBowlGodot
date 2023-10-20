@@ -17,6 +17,7 @@ public partial class NetplayStartScreen : Control
     public Button GoButton => GetNode<Button>("%ShartButton");
 
     private bool ForceHost = false;
+    private bool SkipHolePunch = false;
     public bool IsClient => !HostOption.ButtonPressed || !ForceHost;
 	
     // Called when the node enters the scene tree for the first time.
@@ -26,7 +27,7 @@ public partial class NetplayStartScreen : Control
         HostOption.ButtonGroup = ConnectOption.ButtonGroup;
         
         ConnectOption.ButtonGroup.Pressed += _ => UpdateEnabledShit();
-        GoButton.Pressed += DoNetplayShit;
+        GoButton.Pressed += () => DoNetplayShit(ConnectOption.ButtonPressed);
 
         this.NecoClient().ConnectionFinished += ClientsDoneConnecting;
 		
@@ -35,24 +36,31 @@ public partial class NetplayStartScreen : Control
         if (OS.GetCmdlineUserArgs().Contains("-H"))
         {
             ForceHost = true;
-            DoNetplayShit();
+            SkipHolePunch = true;
+            DoNetplayShit(false);
         } else if (OS.GetCmdlineUserArgs().Contains("-C"))
         {
-            DoNetplayShit();
+            DoNetplayShit(true);
         }
     }
 
-    private void DoNetplayShit()
+    private void DoNetplayShit(bool isClient)
     {
-        if (IsClient)
+        if (isClient)
         {
             this.NecoClient().SetupAsClient(IpEntry.Text);
         }
         else
         {
             // We hosting!!	
-            this.NecoClient().SetupForHosting();
+            this.NecoClient().SetupForHosting(!SkipHolePunch);
             Logger.Info("Host button pressed!");
+
+            if (!this.NecoClient().HolePunchSuccess)
+            {
+                GetNode<RichTextLabel>("%WaitingAsHost").Text +=
+                    $"\nFailed to hole punch (error {this.NecoClient().HolePunchReturnCode}). You probably have to port forward 13237.";
+            }
         }
         
         UpdateEnabledShit();
@@ -60,6 +68,7 @@ public partial class NetplayStartScreen : Control
 
     public void UpdateEnabledShit()
     {
+        ForceHost = HostOption.ButtonPressed;
         IpEntry.Visible = !HostOption.ButtonPressed;
 
         GetNode<Control>("%NetplayControls").Visible = !this.NecoClient().NetworkStarted;

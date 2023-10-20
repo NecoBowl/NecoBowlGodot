@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
@@ -17,6 +18,7 @@ using NecoBowl.Core.Sport.Tactics;
 using NecoBowl.Core.Tactics;
 using NecoBowl.Core.Tags;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using NLog;
 using JsonException = Newtonsoft.Json.JsonException;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -51,14 +53,17 @@ public partial class Client : Node
 
     public NecoPlayerRole PlayerRole =>
         Player is null ? NecoPlayerRole.Offense : this.NecoMatch().Context.Players.RoleOf(Player.Id);
-    
+
     /// <summary>
     /// Tracks player requests to end the play that gets displayed at the start of every turn (except the first).
     /// </summary>
-    private readonly Dictionary<NecoPlayerRole, bool> EndPlayRequests = new();
+    private readonly Dictionary<NecoPlayerRole, bool> EndPlayRequests =
+        Enum.GetValues<NecoPlayerRole>().ToDictionary(r => r, _ => false);
 
     public bool NetworkStarted { get; private set; } = false;
     public bool IsHostingForReal { get; private set; } = false;
+    public bool HolePunchSuccess { get; private set; } = false;
+    public int HolePunchReturnCode = 0;
 
     public override void _Ready()
     {
@@ -78,17 +83,16 @@ public partial class Client : Node
     public bool LocalHasRequestedEndPlay()
     {
         if (Player is null) return false;
-        return EndPlayRequests.ContainsKey(this.NecoMatch().Context.Players.RoleOf(Player.Id));
+        return EndPlayRequests[this.NecoMatch().Context.Players.RoleOf(Player.Id)];
     }
 
     public void SendNecoInput(NecoInput input)
     {
         var inputSer = JsonConvert.SerializeObject(input,
-            new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented, Converters = { new CardConverter() }});
+            new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented, Converters = { new CardConverter(), new StringEnumConverter() }});
 
         Logger.Info(inputSer);
         
-        Rpc_SendNecoInput(inputSer);
         Rpc(nameof(Rpc_SendNecoInput), inputSer);
     }
 
@@ -101,18 +105,17 @@ public partial class Client : Node
             return;
         }
         
-        Rpc_RequestEndPlay(Player.Id.Id.ToString());
         Rpc(nameof(Rpc_RequestEndPlay), Player.Id.Id.ToString());
     }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable,
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable,
         TransferChannel = 0)]
     private void Rpc_RequestEndPlay(string playerGuid)
     {
         var playerId = new NecoPlayerId(Guid.Parse(playerGuid));
         EndPlayRequests[this.NecoMatch().Context.Players.RoleOf(playerId)] = true;
 
-        // Send signal and reset the dict if all players are true.
+        // Send signal and reset the dict if all players have requested to end.
         if (EndPlayRequests.Values.All(b => b))
         {
             EmitSignal(nameof(EndPlayRequested));
@@ -123,7 +126,7 @@ public partial class Client : Node
         }
     }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable,
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable,
         TransferChannel = 0)]
     private void Rpc_SendNecoInput(string necoInputSer)
     {
@@ -151,7 +154,7 @@ public partial class Client : Node
         this.Player = this.NecoMatch().Context.Players.FromRole((NecoPlayerRole)clientRole);
     }
 
-    [Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    [Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
     private void Rpc_StartMatchView()
     {
         EmitSignal(nameof(ConnectionFinished));
@@ -171,7 +174,7 @@ public partial class Client : Node
         NetworkStarted = true;
     }
 
-    public void SetupForHosting()
+    public void SetupForHosting(bool doHolePunch)
     {
         if (NetworkStarted)
             throw new InvalidOperationException();
@@ -187,8 +190,44 @@ public partial class Client : Node
         IsHostingForReal = true;
 
         Multiplayer.PeerConnected += Host_OnPlayerConnected;
-        
+
+        if (doHolePunch)
+        {
+            HolePunch();
+
+            if (!HolePunchSuccess)
+            {
+                Logger.Debug("Holepunching failed.");
+            }
+            else
+            {
+                Logger.Debug("Holepunch success!");
+            }
+        }
+
         NetworkStarted = true;
+    }
+
+    private void HolePunch()
+    {
+        Logger.Debug("Trying to holepunch with UPnP...");
+        var upnp = new Upnp();
+        var err = upnp.Discover();
+        if (err > 0)
+        {
+            Logger.Error($"UPnP error {(Upnp.UpnpResult)err} during discovery.");
+            HolePunchReturnCode = err;
+            return;
+        }
+
+        if (upnp.AddPortMapping(ENetPort) != 0)
+        {
+            Logger.Error($"UPnP error {(Upnp.UpnpResult)err} while trying to add port mapping.");
+            HolePunchReturnCode = err;
+            return;
+        }
+
+        HolePunchSuccess = true;
     }
 
     private void Host_OnPlayerConnected(long id)
@@ -217,6 +256,8 @@ public class CardConverter : JsonConverter<Card>
         writer.WriteStartObject();
         writer.WritePropertyName("CardModel");
         writer.WriteValue(value.CardModel.InternalName);
+        writer.WritePropertyName("CardId");
+        writer.WriteValue(value.CardId.Value.ToString());
         writer.WriteEndObject();
     }
 
@@ -224,12 +265,18 @@ public class CardConverter : JsonConverter<Card>
         Newtonsoft.Json.JsonSerializer serializer)
     {
         CardModel? cardModel = null;
+        NecoCardId? cardId = null;
         while (reader.Read())
         {
             Logger.Info(reader.Value);
             if (reader.TokenType == JsonToken.EndObject)
             {
-                return new UnitCard((UnitCardModel)cardModel);
+                if (cardModel is null || cardId is null)
+                {
+                    throw new JsonException("failed to parse card");
+                }
+                
+                return new UnitCard((UnitCardModel)cardModel, cardId.Value);
             }
             
             if (reader.Path.EndsWith(".CardModel"))
@@ -238,10 +285,15 @@ public class CardConverter : JsonConverter<Card>
                 
                 cardModel = Asset.Card.All.Select(c => c.CardModel)
                     .SingleOrDefault(c => c.InternalName == reader.Value!.ToString());
+                
                 if (cardModel is null)
                 {
                     throw new JsonException($"invalid card model {cardModel}");
                 }
+            } else if (reader.Path.EndsWith(".CardId"))
+            {
+                reader.Read();
+                cardId = new NecoCardId(Guid.Parse(reader.Value!.ToString()));
             }
         }
 

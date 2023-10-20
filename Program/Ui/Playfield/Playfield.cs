@@ -112,6 +112,9 @@ public partial class Playfield : Control
 
         this.NecoClient().InputSent += InputSubmitted;
         this.NecoClient().EndPlayRequested += EndPlayRequested;
+        
+        EndPlayButton.SetMeta("oldtext", EndPlayButton.Text);
+        SubmitTurnButton.SetMeta("oldtext", SubmitTurnButton.Text);
 
         UpdateControls();
         Populate();
@@ -126,6 +129,7 @@ public partial class Playfield : Control
         }
 
         ShouldEndPlay = true;
+        Populate();
     }
 
     private void InputSubmitted()
@@ -248,11 +252,9 @@ public partial class Playfield : Control
 
     private void Populate()
     {
-        if (ShouldEndPlay) {
-            Play = null;
-            RightPanelTabs.CurrentTab = 0;
-
-            ShouldEndPlay = false;
+        if (ShouldEndPlay)
+        {
+            EndPlay();
         }
         
         UpdateControls();
@@ -304,15 +306,25 @@ public partial class Playfield : Control
 
         if (Play is not null && this.NecoClient().LocalHasRequestedEndPlay())
         {
-            EndPlayButton.SetMeta("oldtext", EndPlayButton.Text);
             EndPlayButton.Text = "Waiting for other player to end play...";
         } else if (Play is null && WaitingForOther)
         {
-            SubmitTurnButton.SetMeta("oldtext", SubmitTurnButton.Text);
             SubmitTurnButton.Text = "Waiting for other player to end turn...";
         }
         
         UpdateSpaceHoverTexture();
+    }
+
+    private void EndPlay()
+    {
+        Play = null;
+        RightPanelTabs.CurrentTab = 0;
+
+        ShouldEndPlay = false;
+        WaitingForOther = false;
+
+        EndPlayButton.Text = (string)EndPlayButton.GetMeta("oldtext");
+        SubmitTurnButton.Text = (string)SubmitTurnButton.GetMeta("oldtext");
     }
 
     private void OnStepDirectorFinished()
