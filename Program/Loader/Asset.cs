@@ -49,7 +49,7 @@ public static partial class Asset
             return All.Single(c => card.CardModel == c.CardModel);
         }
 
-        public static Card From(CardModel cardModel)
+        public static Card From(CardModel? cardModel)
         {
             return All.Single(c => cardModel == c.CardModel);
         }

@@ -1,13 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-
 using Godot;
-
 using neco_soft.NecoBowlGodot.Program.ResourceTypes;
-using neco_soft.NecoBowlGodot.Program.Ui;
-using neco_soft.NecoBowlGodot.Program.Ui.Playfield;
 using NecoBowl.Core;
 using NecoBowl.Core.Machine;
 using NecoBowl.Core.Machine.Mutations;
@@ -15,6 +9,8 @@ using NecoBowl.Core.Reports;
 using NecoBowl.Core.Sport.Play;
 using NLog;
 using Asset = neco_soft.NecoBowlGodot.Program.Loader.Asset;
+
+namespace neco_soft.NecoBowlGodot.Program.Ui.Playfield;
 
 public partial class StepDirector : Node
 {
@@ -30,13 +26,22 @@ public partial class StepDirector : Node
     private Playfield Playfield;
     private HashSet<DirectorTween> ActiveAnimations = new();
 
-    public StepDirector(Playfield field)
+    private Step? Step;
+
+    /// <summary>
+    /// X and Y multipliers that should be applied to relative movements
+    /// </summary>
+    private Vector2 Transform;
+
+    public StepDirector(Playfield field, Vector2 transform)
     {
         Playfield = field;
+        Transform = transform;
     }
 
     public void ApplyStep(Step step)
     {
+        Step = step;
         MutationListQueue.Enqueue(step.GetAllMutations());
         RunMutationGroup();
     }
@@ -47,16 +52,21 @@ public partial class StepDirector : Node
             return false;
         }
         
-        var unitIdMap = new Dictionary<NecoUnitId, PlayfieldSpace>();
-        foreach (var space in Playfield.GetGridSpaces()) {
-            if (space.SpaceContents?.Unit is not null) {
-                unitIdMap[space.SpaceContents.Unit.Id] = space;
+        var unitIdMap = new Dictionary<NecoUnitId, PlaySpace>();
+        foreach (var space in Playfield.GetGridSpaces().Cast<PlaySpace>()) {
+            if (space.Space?.Unit is not null) {
+                unitIdMap[space.Space.Unit.Id] = space;
             }
         }
 
         var tweensByUnitId = new Dictionary<NecoUnitId, DirectorTween>();
         
         var muts = MutationListQueue.Dequeue().ToList();
+
+        foreach (var movement in Step!.GetAllMovements().Where(s => s.IsChange)) {
+            var unitSpace = unitIdMap[movement.UnitId];
+            TweenForUnit(movement.UnitId).MoveTween(unitSpace.PlayUnitDisplay!, Playfield.GetGridSpace(movement.NewPos));
+        }
 
         foreach (var mut in muts) {
             tweensByUnitId[mut.Subject] = TweenForUnit(mut.Subject);
@@ -72,23 +82,24 @@ public partial class StepDirector : Node
                 var attackerSpace = unitIdMap[attack.Attacker];
                 var receiverSpace = unitIdMap[attack.Receiver];
 
-                var direction = attackerSpace.GlobalPosition.DirectionTo(receiverSpace.GlobalPosition).Normalized();
-                if (true)
+                if (mut is UnitAttacksOnSpace spaceAttack)
                 {
-                    tween.MoveTween(attackerSpace.PlayUnitDisplay!,
-                        (PlayfieldSpace)Playfield.GetGridSpace(attack.ConflictPosition));
-                    tween.Chain().MoveInDirectionTween(attackerSpace.PlayUnitDisplay!, -direction, 30f, 0.2f);
-                    tween.Chain().EmptyTween(0.3f);
-                    tween.Chain().MoveInDirectionTween(attackerSpace.PlayUnitDisplay!, direction, 25f, 0.1f);
-                    tween.Chain().MoveTween(attackerSpace.PlayUnitDisplay!, attackerSpace);
+
+                    var direction = attackerSpace.GlobalPosition.DirectionTo(receiverSpace.GlobalPosition).Normalized();
+                    if (true)
+                    {
+                        tween.MoveTween(attackerSpace.PlayUnitDisplay!, Playfield.GetGridSpace(spaceAttack.ConflictPosition));
+                        tween.Chain().MoveInDirectionTween(attackerSpace.PlayUnitDisplay!, -direction, 30f, 0.2f);
+                        tween.Chain().EmptyTween(0.3f);
+                        tween.Chain().MoveInDirectionTween(attackerSpace.PlayUnitDisplay!, direction, 25f, 0.1f);
+                        tween.Chain().MoveTween(attackerSpace.PlayUnitDisplay!, attackerSpace);
 //                        tween.MoveInDirectionTween(attackerSpace.PlayUnitDisplay!, direction.Inverse(), 30f, 0.2f);
+                    }
                 }
-#if false
-                else if (attack.AttackKind == NecoPlayfieldMutation.UnitAttacks.Kind.SpaceSwap)
+                else if (mut is UnitAttacksBetweenSpaces betweenSpaceAttack)
                 {
                     tween.CombatTween(attackerSpace, receiverSpace);
                 }
-#endif
             }
             else if (mut is UnitPicksUpItem pickedUpItemMut)
             {
@@ -130,7 +141,7 @@ public partial class StepDirector : Node
     {
         var existingTween = ActiveAnimations.FirstOrDefault(t => t.UnitId == subject);
         var tween = existingTween?.Tween ?? CreateTween();
-        var directorTween = new DirectorTween(subject, tween);
+        var directorTween = new DirectorTween(subject, tween, Transform);
         if (existingTween is null) {
             tween.Finished += () => OnAnimationFinished(directorTween);
         }
@@ -149,7 +160,7 @@ public partial class StepDirector : Node
         }
     }
     
-    public record DirectorTween(NecoUnitId UnitId, Tween Tween)
+    public record DirectorTween(NecoUnitId UnitId, Tween Tween, Vector2 Transform)
     {
         public readonly NecoUnitId UnitId = UnitId;
         public Tween Tween { get; private set; } = Tween;
@@ -164,20 +175,17 @@ public partial class StepDirector : Node
 
         public void MoveInDirectionTween(UnitOnPlayfield unit, Vector2 direction, float distance, float time)
         {
-            Logger.Info(unit.Position);
-            Logger.Info(unit.GlobalPosition);
-            Logger.Info(direction);
-            Tween.TweenProperty(unit, "position", direction * distance, time).AsRelative();
+            Tween.TweenProperty(unit, "position", direction * distance * Transform, time).AsRelative();
         }
         
-        public void BumpTween(PlayfieldSpace space, AbsoluteDirection direction)
+        public void BumpTween(PlaySpace space, AbsoluteDirection direction)
         {
-            var startingPos = space.PlayUnitDisplay.GlobalPosition;
-            Tween.TweenProperty(space.PlayUnitDisplay, "global_position", startingPos + direction.ToGodotVector2() * 15f, .25f);
+            var startingPos = space.PlayUnitDisplay!.GlobalPosition;
+            Tween.TweenProperty(space.PlayUnitDisplay, "global_position", startingPos + direction.ToGodotVector2() * 15f * Transform, .25f);
             Tween.TweenProperty(space.PlayUnitDisplay, "global_position", startingPos, 0.25f);
         }
 
-        public void CombatTween(PlayfieldSpace unit1Space, PlayfieldSpace destSpace)
+        public void CombatTween(PlaySpace unit1Space, PlayfieldSpace destSpace)
         {
             var startingPos = unit1Space.GlobalPosition;
             Tween.TweenProperty(unit1Space.PlayUnitDisplay,

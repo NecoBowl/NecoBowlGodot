@@ -15,6 +15,11 @@ run/main_scene="res://Program/Ui/Playfield/Playfield.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+NecoClient="*res://Program/Networking/Client.cs"
+NecoMatch="*res://Program/Game/NecoBowlMatch.cs"
+
 [display]
 
 window/size/viewport_width=1280

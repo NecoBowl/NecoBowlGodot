@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-
+using System.Text.RegularExpressions;
 using Godot;
-
+using neco_soft.NecoBowlGodot.Program.Networking;
 using NecoBowl.Core;
 using NLog;
 
@@ -53,4 +53,10 @@ public static class GodotExt
 
         return list;
     }
+
+    internal static Client NecoClient(this Node node)
+        => node.GetNode<Client>("/root/NecoClient");
+    
+    internal static NecoBowlMatch NecoMatch(this Node node)
+        => node.GetNode<NecoBowlMatch>("/root/NecoMatch");
 }

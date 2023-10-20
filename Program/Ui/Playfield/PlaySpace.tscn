@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b6umglftowo2f"]
+
+[ext_resource type="Script" path="res://Program/Ui/Playfield/PlaySpace.cs" id="1_nolpr"]
+
+[node name="PlaySpace" type="TextureButton"]
+custom_minimum_size = Vector2(52, 52)
+script = ExtResource("1_nolpr")

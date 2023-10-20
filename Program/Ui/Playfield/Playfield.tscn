@@ -37,10 +37,39 @@ layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelLeft/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelLeft/MarginContainer"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TurnIndexDisplay" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/normal_font_size = 36
+text = "Turn 69"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TurnStatusDisplay" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/normal_font_size = 20
+text = "Planning"
+fit_content = true
+autowrap_mode = 0
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -49,14 +78,38 @@ text = "Munty"
 fit_content = true
 scroll_active = false
 
-[node name="MoneyDisplay" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/HBoxContainer"]
+[node name="MoneyDisplay" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 10
 mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 30
 bbcode_enabled = true
-text = "3"
+text = "3/10"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 1
+text = "Mana"
+fit_content = true
+scroll_active = false
+
+[node name="ManaDisplay" type="RichTextLabel" parent="HBoxContainer/PanelLeft/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "15"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
@@ -73,11 +126,17 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="HBoxContainer/PanelCenter" groups=["ui_PlanPhase"]]
+[node name="PreviewPlayButton" type="Button" parent="HBoxContainer/PanelCenter" groups=["ui_PlanPhase"]]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
-text = "Start"
+text = "Preview"
+
+[node name="SubmitTurnButton" type="Button" parent="HBoxContainer/PanelCenter" groups=["ui_PlanPhase"]]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Submit"
 
 [node name="StepButtonGroup" type="HBoxContainer" parent="HBoxContainer/PanelCenter" groups=["ui_PlayPhase"]]
 layout_mode = 2

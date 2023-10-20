@@ -13,7 +13,7 @@ public partial class UnitOnPlayfield : Control
 
     public AnimationPlayer AnimationPlayer => GetNode<AnimationPlayer>($"%{nameof(AnimationPlayer)}");
 
-    public static UnitOnPlayfield Instantiate(Unit unit)
+    public static UnitOnPlayfield New(Unit unit)
     {
         var node = GD.Load<PackedScene>(Common.GetSceneFile()).Instantiate<UnitOnPlayfield>();
         node.SetAnchorsPreset(LayoutPreset.FullRect);

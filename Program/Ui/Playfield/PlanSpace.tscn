@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://duspps12mke37"]
+
+[ext_resource type="Script" path="res://Program/Ui/Playfield/PlanSpace.cs" id="1_dgd1h"]
+
+[node name="PlanSpace" type="TextureButton"]
+custom_minimum_size = Vector2(52, 52)
+offset_right = 52.0
+offset_bottom = 52.0
+script = ExtResource("1_dgd1h")

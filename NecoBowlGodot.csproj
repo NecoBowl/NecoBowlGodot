@@ -15,9 +15,6 @@
     <ProjectReference Include="..\NecoBowl\NecoBowlDefinitions\NecoBowlDefinitions.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Program\Networking" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Program\Ui\Playfield\PlayfieldSpace.cs">
       <DependentUpon>Playfield.cs</DependentUpon>
     </Compile>
@@ -33,5 +30,8 @@
     <Compile Update="Program\Ui\HandWidget\UnitButton.cs">
       <DependentUpon>HandWidget.cs</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 </Project>

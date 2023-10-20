@@ -78,8 +78,8 @@ public partial class CardOptionLine : HBoxContainer
 	}
 
 	private void SendInput(object optionValue)
-		=> ContextSingleton.Context.SendInput(new NecoInput.SetPlanMod(
-			ContextSingleton.Context.Players[NecoPlayerRole.Offense],
+		=> this.NecoMatch().Context.SendInput(new NecoInput.SetPlanMod(
+			this.NecoMatch().Context.Players[this.NecoClient().PlayerRole].Id,
 			Card,
 			OptionId,
 			optionValue

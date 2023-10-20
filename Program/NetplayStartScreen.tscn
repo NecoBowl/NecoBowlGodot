@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://cf6owux4sdrt8"]
+
+[ext_resource type="Script" path="res://Program/NetplayStartScreen.cs" id="1_ldo05"]
+
+[node name="NetplayStartScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ldo05")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NetplayControls" type="VBoxContainer" parent="CenterContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/NetplayControls"]
+layout_mode = 2
+
+[node name="HostOption" type="CheckBox" parent="CenterContainer/NetplayControls/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Host"
+
+[node name="ConnectOption" type="CheckBox" parent="CenterContainer/NetplayControls/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Connect"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/NetplayControls"]
+layout_mode = 2
+
+[node name="IpEntry" type="TextEdit" parent="CenterContainer/NetplayControls/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "192.69.69.69"
+autowrap_mode = 2
+scroll_fit_content_height = true
+
+[node name="ShartButton" type="Button" parent="CenterContainer/NetplayControls"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "GO !"
+
+[node name="WaitingAsHost" type="RichTextLabel" parent="CenterContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Waiting for boys..."
+fit_content = true
+autowrap_mode = 0
+
+[node name="WaitingAsClient" type="RichTextLabel" parent="CenterContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Tryna connect..."
+fit_content = true
+autowrap_mode = 0

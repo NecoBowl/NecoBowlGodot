@@ -71,7 +71,7 @@ public partial class PlayLog : MarginContainer
 
 	public string CreateUnitBbcode(Unit unit)
 	{
-		NecoPlayerRole? role = unit.OwnerId == default ? null : ContextSingleton.Context.Players.RoleOf(unit.OwnerId);
+		NecoPlayerRole? role = unit.OwnerId == default ? null : this.NecoMatch().Context.Players.RoleOf(unit.OwnerId);
 		string colorStr = role == NecoPlayerRole.Offense ? PlayerColor1.ToHtml()
 			: role == NecoPlayerRole.Defense ? PlayerColor2.ToHtml()
 			: PlayerNeutralColor.ToHtml();
